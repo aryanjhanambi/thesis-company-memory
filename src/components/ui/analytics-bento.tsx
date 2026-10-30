@@ -178,7 +178,7 @@ function Tooltip({ mono, api }: { mono: string; api: TipRef }) {
     <div
       ref={box}
       role="tooltip"
-      className={`pointer-events-none fixed z-50 whitespace-nowrap rounded-xl border border-border bg-popover/95 px-2.5 py-2 text-xs text-popover-foreground shadow-lg backdrop-blur-md transition-opacity duration-150 ${tip ? 'opacity-100' : 'opacity-0'}`}
+      className={`pointer-events-none fixed z-50 whitespace-nowrap rounded-sm border border-border bg-popover px-2.5 py-2 text-xs text-popover-foreground transition-opacity duration-150 ${tip ? 'opacity-100' : 'opacity-0'}`}
       style={{ left: pos.l, top: pos.t }}
     >
       {tip && (
@@ -233,7 +233,7 @@ const Delta = ({ children, className = '' }: { children: React.ReactNode; classN
 );
 const Card = ({ className = '', children, ...rest }: React.JSX.IntrinsicElements['section']) => (
   <section
-    className={`relative min-w-0 overflow-hidden rounded-[28px] border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-6 ${className}`}
+    className={`relative min-w-0 overflow-hidden border-t border-border bg-card py-5 text-card-foreground sm:py-6 ${className}`}
     {...rest}
   >
     {children}
@@ -1007,9 +1007,9 @@ function VasnevBadge({ className = '' }: { className?: string }) {
         />
       </svg>
       <style>{`
-.vb-badge{--vb-bg:#fff;--vb-line:rgba(0,0,0,.08);--vb-fg:#0b0b0c;--vb-mut:rgba(0,0,0,.45);--vb-off:rgba(0,0,0,.14);--vb-on:#3c2cff;
+.vb-badge{--vb-bg:#fff;--vb-line:rgba(0,0,0,.08);--vb-fg:#0b0b0c;--vb-mut:rgba(0,0,0,.45);--vb-off:rgba(0,0,0,.14);--vb-on:#3e644e;
   display:inline-flex;align-items:center;gap:9px;height:34px;padding:0 12px 0 11px;border-radius:17px;background:var(--vb-bg);border:1px solid var(--vb-line);
-  color:var(--vb-fg);text-decoration:none;font:500 13px/1 Geist,ui-sans-serif,system-ui,-apple-system,sans-serif;letter-spacing:-.02em;
+  color:var(--vb-fg);text-decoration:none;font:500 13px/1 IBM Plex Sans,ui-sans-serif,system-ui,-apple-system,sans-serif;letter-spacing:-.02em;
   box-shadow:0 8px 24px -14px rgba(0,0,0,.25);transition:border-color .25s,transform .25s cubic-bezier(.2,.9,.25,1)}
 .dark .vb-badge{--vb-bg:#111113;--vb-line:rgba(255,255,255,.1);--vb-fg:#fff;--vb-mut:rgba(255,255,255,.5);--vb-off:rgba(255,255,255,.16);--vb-on:#6a5cff;
   box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px -12px rgba(0,0,0,.6)}
@@ -1040,8 +1040,8 @@ export function AnalyticsBento({
   categories,
   seasonality,
   colors = {},
-  fontFamily = 'Geist, ui-sans-serif, system-ui, -apple-system, sans-serif',
-  monoFamily = "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+  fontFamily = 'IBM Plex Sans, ui-sans-serif, system-ui, -apple-system, sans-serif',
+  monoFamily = "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
   credit = true,
   className = '',
   style,
@@ -1058,8 +1058,8 @@ export function AnalyticsBento({
 
   const c = {
     revenue: colors.revenue ?? ['var(--ab-rev-a)', 'var(--ab-rev-b)'],
-    desktop: colors.desktop ?? ['#22D3EE', '#3c2cff'],
-    mobile: colors.mobile ?? ['#FFB800', '#FF3DA5'],
+    desktop: colors.desktop ?? ['#78967c', '#3e644e'],
+    mobile: colors.mobile ?? ['#b8aa81', '#925236'],
     radar: colors.radar ?? 'var(--ab-radar)',
   } as const;
   const mono: React.CSSProperties = {

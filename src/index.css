@@ -1,30 +1,30 @@
 @import 'tailwindcss';
 
 @theme inline {
-  --color-background: #f7f8fa;
-  --color-foreground: #263044;
+  --color-background: #f4f1ea;
+  --color-foreground: #252820;
   --color-card: #ffffff;
-  --color-card-foreground: #263044;
-  --color-muted: #f3f5f7;
-  --color-muted-foreground: #858e9b;
-  --color-border: #e9ecf0;
+  --color-card-foreground: #252820;
+  --color-muted: #ebece3;
+  --color-muted-foreground: #697164;
+  --color-border: #d9d8cf;
   --color-popover: #ffffff;
-  --color-popover-foreground: #263044;
-  --color-ring: #8da773;
+  --color-popover-foreground: #252820;
+  --color-ring: #68745a;
 }
 :root {
   font-family:
-    'Geist',
+    'IBM Plex Sans',
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
-  color: #2d3545;
-  background: #f7f8fa;
+  color: #252820;
+  background: #f4f1ea;
   font-synthesis: none;
   font-weight: 400;
-  --muted: #88919f;
-  --ink: #263044;
-  --line: #e9ecf0;
+  --muted: #6c7265;
+  --ink: #252820;
+  --line: #d9d8cf;
   --green: #6c9150;
   --amber: #af8246;
 }
@@ -132,9 +132,9 @@ button:hover {
   font-family: Georgia, serif;
   font-style: italic;
   font-weight: 600;
-  background: #283248;
+  background: #26392e;
   color: #eef4e4;
-  border-radius: 10px;
+  border-radius: 3px;
   width: 31px;
   height: 34px;
   display: inline-flex;
@@ -155,15 +155,15 @@ button:hover {
   color: #92ad76;
 }
 .workspace-label {
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1.45px;
-  color: #a1a8b1;
+  color: #72776b;
   font-weight: 550;
   padding: 36px 13px 13px;
 }
 .sidebar-search {
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 3px;
   padding: 9px 9px;
   display: flex;
   align-items: center;
@@ -171,12 +171,12 @@ button:hover {
   font-size: 11px;
   color: #929aa6;
   width: 100%;
-  box-shadow: 0 2px 3px #26304403;
+  box-shadow: none;
 }
 .sidebar-search > span {
   margin-left: auto;
-  font-size: 9px;
-  border: 1px solid #e9ecf0;
+  font-size: 10px;
+  border: 1px solid #d9d8cf;
   border-radius: 3px;
   padding: 0 4px;
   color: #9aa2ad;
@@ -195,7 +195,7 @@ button:hover {
   font-size: 12px;
   color: #7b8593;
   padding: 11px 12px;
-  border-radius: 7px;
+  border-radius: 3px;
 }
 .sidebar nav > button.active {
   background: #f0f3ec;
@@ -210,16 +210,16 @@ button:hover {
   font-size: 10px;
   background: #e6ecdf;
   color: #7b906d;
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 1px 5px;
 }
 .sidebar-section-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1.3px;
-  color: #a1a8b1;
+  color: #72776b;
   padding: 32px 11px 14px;
   font-weight: 550;
 }
@@ -237,7 +237,7 @@ button:hover {
   padding: 10px 10px;
   gap: 10px;
   text-align: left;
-  border-radius: 7px;
+  border-radius: 3px;
   font-size: 12px;
 }
 .company-list > button.selected {
@@ -245,8 +245,8 @@ button:hover {
 }
 .company-list small {
   display: block;
-  font-size: 9px;
-  color: #a0a8b3;
+  font-size: 10px;
+  color: #777d70;
   margin-top: 3px;
   letter-spacing: 0.3px;
 }
@@ -254,7 +254,7 @@ button:hover {
   height: 29px;
   width: 29px;
   border: 1px solid #e5e9e0;
-  border-radius: 7px;
+  border-radius: 3px;
   background: #edf0f5;
   display: flex;
   align-items: center;
@@ -295,25 +295,14 @@ button:hover {
   margin-top: auto;
   padding-top: 30px;
 }
-.memory-note {
-  margin: 0 3px 21px;
-  border-radius: 9px;
-  border: 1px solid #edf0e8;
-  padding: 14px 12px;
-  background: linear-gradient(145deg, #fafbf7, #f8faf5);
-}
-.memory-note > div {
-  display: flex;
-  gap: 8px;
-  color: #738664;
-}
+
 .memory-note span {
   font-size: 11px;
   line-height: 1.7;
   font-weight: 500;
 }
 .memory-note p {
-  font-size: 9px;
+  font-size: 10px;
   color: #a1a99a;
   margin-top: 9px;
 }
@@ -351,7 +340,7 @@ button:hover {
 }
 .profile small {
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   color: #9da4ae;
   margin-top: 4px;
 }
@@ -399,7 +388,7 @@ button:hover {
   background: #f5f8ef;
   border: 1px solid #e9eedf;
   padding: 5px 8px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .demo-pill > span {
   width: 4px;
@@ -412,8 +401,8 @@ button:hover {
   align-items: center;
   justify-content: center;
   padding: 5px;
-  border-radius: 5px;
-  color: #9aa2af;
+  border-radius: 3px;
+  color: #707569;
   position: relative;
 }
 .icon-button:hover {
@@ -436,10 +425,10 @@ button:hover {
   top: 57px;
   background: white;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 3px;
   padding: 20px;
   width: 300px;
-  box-shadow: 0 14px 50px #29354c17;
+  box-shadow: none;
   z-index: 30;
   font-size: 12px;
 }
@@ -468,7 +457,7 @@ main {
 .company-logo {
   width: 50px;
   height: 50px;
-  border-radius: 12px;
+  border-radius: 3px;
   border: 1px solid #e0e8d6;
   display: flex;
   align-items: center;
@@ -491,11 +480,11 @@ h1 {
 }
 .ticker {
   color: #8c94a1;
-  background: #edf0f3;
-  font-size: 9px;
+  background: #e0dfd5;
+  font-size: 10px;
   letter-spacing: 0.4px;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 .watching {
   font-size: 10px;
@@ -514,7 +503,7 @@ h1 {
 .company-heading p {
   font-size: 10px;
   margin-top: 6px;
-  color: #959daa;
+  color: #74796e;
 }
 .dot-separator {
   margin: 0 9px;
@@ -529,12 +518,12 @@ h1 {
   justify-content: center;
   gap: 7px;
   border: 1px solid #e0e4e9;
-  border-radius: 7px;
+  border-radius: 3px;
   background: #fff;
   padding: 9px 13px;
   font-size: 11px;
   color: #667082;
-  box-shadow: 0 2px 2px #28324803;
+  box-shadow: none;
   font-weight: 450;
   white-space: nowrap;
 }
@@ -543,13 +532,13 @@ h1 {
   border-color: #ccd4df;
 }
 .button.primary {
-  background: #293348;
+  background: #26392e;
   color: #fff;
-  border-color: #293348;
-  box-shadow: 0 2px 4px #29334814;
+  border-color: #26392e;
+  box-shadow: none;
 }
 .button.primary:hover {
-  background: #3a4860;
+  background: #3c5344;
 }
 .button.danger {
   color: #af6c5c;
@@ -585,8 +574,8 @@ h1 {
 select {
   background: white;
   color: #778191;
-  border: 1px solid #e5e9ef;
-  border-radius: 6px;
+  border: 1px solid #d4d6cb;
+  border-radius: 3px;
   padding: 7px 22px 7px 9px;
   font-size: 10px;
   max-width: 185px;
@@ -594,7 +583,7 @@ select {
 }
 .tabs-row {
   margin-top: 28px;
-  border-bottom: 1px solid #e4e8ed;
+  border-bottom: 1px solid #d3d4c9;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -625,18 +614,18 @@ select {
   left: 0;
   right: 0;
   height: 2px;
-  background: #8da773;
+  background: #68745a;
   border-radius: 2px;
 }
 .tabs > button > span {
   background: #e9edf1;
   color: #8993a1;
-  font-size: 9px;
-  border-radius: 4px;
+  font-size: 10px;
+  border-radius: 3px;
   padding: 1px 4px;
 }
 .snapshot-label {
-  font-size: 9px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -655,22 +644,13 @@ select {
   gap: 11px;
   background: #f0f4e9;
   border: 1px solid #e4ebd9;
-  border-radius: 9px;
+  border-radius: 3px;
   margin-top: 22px;
   padding: 13px 15px;
   color: #6f7f60;
   font-size: 10px;
 }
-.banner-icon {
-  width: 28px;
-  height: 28px;
-  background: #e7eedc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  color: #8b9f75;
-}
+
 .review-banner p {
   line-height: 1.7;
 }
@@ -694,9 +674,9 @@ select {
 }
 .panel {
   background: #fff;
-  border: 1px solid #e6e9ef;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px #26304402;
+  border: 1px solid #d4d3c8;
+  border-radius: 3px;
+  box-shadow: none;
   overflow: hidden;
 }
 .metric-grid {
@@ -721,12 +701,12 @@ select {
   gap: 6px;
 }
 .metric-top small {
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.5px;
   background: #f5f6f8;
   padding: 2px 4px;
   border-radius: 3px;
-  color: #a0a8b3;
+  color: #777d70;
 }
 .metric-top > svg {
   color: #b2bac5;
@@ -760,15 +740,15 @@ select {
   align-items: center;
   gap: 6px;
   margin-top: 10px;
-  font-size: 8px;
-  color: #a0a8b3;
+  font-size: 10px;
+  color: #777d70;
 }
 .metric-main .metric-delta {
   display: flex;
   align-items: center;
   gap: 2px;
-  font-size: 9px;
-  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
 }
 .green {
   color: #739354;
@@ -789,14 +769,14 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 8px;
-  color: #a3aab5;
+  font-size: 10px;
+  color: #737a6b;
 }
 .metric-foot button {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 8px;
+  font-size: 10px;
   color: #919baa;
 }
 .metric-main strong .text-em {
@@ -805,21 +785,7 @@ select {
   margin-left: 9px;
   letter-spacing: -0.3px;
 }
-.review-rings {
-  width: 72px;
-  position: relative;
-  flex-shrink: 0;
-}
-.review-rings > svg:first-child {
-  width: 100%;
-  height: 72px;
-}
-.review-rings > svg:last-child {
-  position: absolute;
-  top: 28px;
-  left: 28px;
-  color: #9ba989;
-}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr);
@@ -843,22 +809,22 @@ select {
 }
 .panel-heading p {
   font-size: 10px;
-  color: #9aa2af;
+  color: #707569;
   margin-top: 6px;
   line-height: 1.6;
 }
 .count-pill {
-  font-family: 'Geist Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   letter-spacing: 0;
   background: #f1f3f6;
-  border: 1px solid #edf0f3;
+  border: 1px solid #e0dfd5;
   padding: 2px 5px;
   color: #99a2af;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 .panel-heading select {
-  font-size: 9px;
+  font-size: 10px;
   background: #fff;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -873,36 +839,15 @@ select {
   gap: 12px;
   padding: 19px 0;
   text-align: left;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #deddd3;
 }
 .change-item:hover {
   background: #fafbf8;
 }
-.change-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.amber-bg {
-  background: #fbf4e8;
-  color: #c3a16e;
-}
-.green-bg {
-  background: #f0f6e9;
-  color: #94ae78;
-}
-.purple-bg {
-  background: #f1eff7;
-  color: #a29abb;
-}
+
 .change-eyebrow {
-  font-size: 8px;
-  color: #a1a8b2;
+  font-size: 10px;
+  color: #717768;
   display: flex;
   gap: 6px;
   align-items: center;
@@ -918,7 +863,7 @@ select {
 .change-item p {
   font-size: 10px;
   line-height: 1.7;
-  color: #9aa2ae;
+  color: #717768;
   margin-top: 6px;
   max-width: 410px;
 }
@@ -927,7 +872,7 @@ select {
   align-items: center;
   gap: 4px;
   color: #9fa8b5;
-  font-size: 8px;
+  font-size: 10px;
   margin-top: 9px;
 }
 .change-arrow {
@@ -936,7 +881,7 @@ select {
   margin-top: 4px;
 }
 .panel-bottom-link {
-  border-top: 1px solid #edf0f3;
+  border-top: 1px solid #e0dfd5;
   width: 100%;
   display: flex;
   align-items: center;
@@ -957,11 +902,11 @@ select {
   display: flex;
   gap: 11px;
   padding: 17px 0;
-  border-top: 1px solid #edf0f3;
+  border-top: 1px solid #e0dfd5;
 }
 .thesis-number {
-  font-family: 'Geist Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   color: #b8bfc8;
   padding-top: 7px;
 }
@@ -986,7 +931,7 @@ select {
 }
 .thesis-content > p {
   font-size: 10px;
-  color: #9aa3b0;
+  color: #707569;
   line-height: 1.7;
   margin-top: 6px;
   max-width: 650px;
@@ -1002,10 +947,10 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.4;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
   white-space: nowrap;
   border: 1px solid transparent;
 }
@@ -1034,8 +979,8 @@ select {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 8px;
-  color: #a0a9b5;
+  font-size: 10px;
+  color: #747b6e;
 }
 .thesis-panel {
   display: flex;
@@ -1045,12 +990,12 @@ select {
   margin-top: auto;
 }
 .graph-wrap {
-  background-image: radial-gradient(#d8dfe6 0.7px, transparent 0.7px);
+  background-image: none;
   background-size: 16px 16px;
   margin: 0 15px 14px;
   position: relative;
   background-color: #fdfefe;
-  border-radius: 7px;
+  border-radius: 3px;
   border: 1px solid #f0f2f5;
 }
 .graph-toolbar {
@@ -1064,7 +1009,7 @@ select {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 8px;
+  font-size: 10px;
   color: #99a2af;
 }
 .live-dot {
@@ -1074,11 +1019,11 @@ select {
   background: #a8bc95;
 }
 .graph-toolbar select {
-  font-size: 8px;
+  font-size: 10px;
   background: #ffffffcf;
   padding-top: 5px;
   padding-bottom: 5px;
-  border-color: #edf0f4;
+  border-color: #deddd3;
 }
 .graph-wrap > svg {
   width: 100%;
@@ -1105,7 +1050,7 @@ select {
 .legend {
   display: flex;
   gap: 10px;
-  font-size: 8px;
+  font-size: 10px;
   color: #a0a8b2;
 }
 .legend > span {
@@ -1122,9 +1067,9 @@ select {
   display: flex;
   align-items: center;
   border: 1px solid #e8edf1;
-  border-radius: 5px;
+  border-radius: 3px;
   background: white;
-  font-size: 8px;
+  font-size: 10px;
   color: #a1a9b4;
   gap: 5px;
 }
@@ -1146,8 +1091,8 @@ select {
   letter-spacing: -1.1px;
 }
 .mix-total > span {
-  font-size: 9px;
-  color: #a5adb9;
+  font-size: 10px;
+  color: #777d70;
   display: block;
   margin-top: 4px;
 }
@@ -1155,7 +1100,7 @@ select {
   display: flex;
   gap: 3px;
   height: 22px;
-  border-radius: 5px;
+  border-radius: 3px;
   overflow: hidden;
   margin: 20px 21px 13px;
 }
@@ -1188,14 +1133,14 @@ select {
   margin-left: auto;
   font-weight: 450;
   color: #747e8f;
-  font-family: 'Geist Mono', monospace;
-  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
 }
 .mix-rows small {
   width: 46px;
   text-align: right;
-  font-family: 'Geist Mono', monospace;
-  font-size: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   color: #a7aeba;
 }
 .mix-note {
@@ -1206,9 +1151,9 @@ select {
   color: #abb79d;
 }
 .mix-note p {
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.7;
-  color: #99a18f;
+  color: #68765c;
 }
 .mix-panel > .panel-bottom-link {
   margin-top: auto;
@@ -1216,8 +1161,8 @@ select {
 .ask-panel {
   margin-top: 22px;
   border: 1px solid #e3e8df;
-  border-radius: 12px;
-  background: linear-gradient(120deg, #fff, #fbfcf8);
+  border-radius: 3px;
+  background: #f4f1ea;
   padding: 21px;
 }
 .ask-heading {
@@ -1225,28 +1170,18 @@ select {
   align-items: center;
   gap: 10px;
 }
-.ask-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #99ad82;
-  border: 1px solid #e8eedf;
-  border-radius: 8px;
-  background: #f3f7ed;
-}
+
 .ask-heading h2 {
   font-size: 12px;
   letter-spacing: -0.2px;
 }
 .ask-heading p {
-  font-size: 9px;
-  color: #9ca596;
+  font-size: 10px;
+  color: #747b6b;
   margin-top: 5px;
 }
 .retrieval-label {
-  font-size: 8px;
+  font-size: 10px;
   color: #9ea995;
   margin-left: auto;
 }
@@ -1255,13 +1190,13 @@ select {
   gap: 10px;
   align-items: center;
   border: 1px solid #e4e9e1;
-  border-radius: 7px;
+  border-radius: 3px;
   background: white;
   padding: 5px 6px 5px 13px;
   margin-top: 17px;
 }
 .ask-form:focus-within {
-  box-shadow: 0 0 0 2px #e3ebd9;
+  box-shadow: none;
 }
 .ask-form input {
   border: 0;
@@ -1281,7 +1216,7 @@ select {
   align-items: center;
   justify-content: center;
   background: #edf2e6;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 29px;
   height: 29px;
   color: #8ba371;
@@ -1296,11 +1231,11 @@ select {
   display: flex;
   align-items: center;
   gap: 13px;
-  font-size: 8px;
+  font-size: 10px;
   color: #9ca593;
   padding: 5px 7px;
   border: 1px solid #e9ede3;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #ffffff7f;
 }
 .suggestions > button:hover {
@@ -1311,8 +1246,8 @@ select {
   justify-content: space-between;
   align-items: center;
   gap: 15px;
-  font-size: 8px;
-  color: #a9b0ba;
+  font-size: 10px;
+  color: #777b6e;
   padding: 23px 0;
 }
 .page-footer > span {
@@ -1331,7 +1266,7 @@ select {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 8px;
+  font-size: 10px;
 }
 .full-panel {
   margin-top: 24px;
@@ -1362,7 +1297,7 @@ select {
   align-items: center;
   gap: 6px;
   border: 1px solid #e5e9ee;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 6px 9px;
   font-size: 10px;
   color: #9aa4b1;
@@ -1400,7 +1335,7 @@ select {
   gap: 11px;
   text-align: left;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 3px;
   padding: 15px;
   color: #9aa5b2;
 }
@@ -1415,7 +1350,7 @@ select {
 }
 .memory-documents span {
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   margin-top: 4px;
 }
 .memory-documents button > svg:last-child {
@@ -1436,7 +1371,7 @@ select {
   width: 100%;
 }
 .report-table-head {
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 1px;
   color: #a6aebb;
   border-block: 1px solid var(--line);
@@ -1462,7 +1397,7 @@ select {
   width: 33px;
   height: 40px;
   border: 1px solid #e5e9ee;
-  border-radius: 5px;
+  border-radius: 3px;
   background: #fafbfc;
   color: #a5b29a;
 }
@@ -1473,12 +1408,12 @@ select {
 }
 .report-row small {
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   margin-top: 4px;
   color: #a9b1bd;
 }
 .report-provenance {
-  font-size: 9px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -1511,7 +1446,7 @@ select {
   --color-background: #fff;
 }
 .financial-bento section {
-  border-radius: 12px;
+  border-radius: 3px;
 }
 .financial-bento svg {
   max-width: 100%;
@@ -1537,7 +1472,7 @@ select {
   gap: 15px;
   align-items: center;
   border: 1px dashed #dce4d4;
-  border-radius: 10px;
+  border-radius: 3px;
   background: #f7faf3;
   margin-top: 24px;
   padding: 25px;
@@ -1616,7 +1551,7 @@ select {
   border: 1px solid #e5ebde;
   padding: 12px;
   background: #ffffff9c;
-  border-radius: 7px;
+  border-radius: 3px;
   text-align: left;
   font-size: 10px;
   line-height: 1.7;
@@ -1624,7 +1559,7 @@ select {
 }
 .answer-evidence b {
   display: block;
-  font-size: 9px;
+  font-size: 10px;
   margin-bottom: 4px;
   font-weight: 550;
   color: #738565;
@@ -1636,7 +1571,7 @@ select {
   margin-left: auto;
 }
 .answer > small {
-  font-size: 9px;
+  font-size: 10px;
   display: block;
   color: #a4ac9c;
   margin-top: 13px;
@@ -1651,11 +1586,11 @@ select {
   align-items: center;
   gap: 9px;
   padding: 13px 18px;
-  border-radius: 9px;
+  border-radius: 3px;
   background: #2f3c32;
   color: #eef5e6;
   font-size: 12px;
-  box-shadow: 0 8px 35px #293d3129;
+  box-shadow: none;
   z-index: 100;
   animation: appear 0.2s ease-out;
 }
@@ -1663,7 +1598,7 @@ select {
   position: fixed;
   inset: 0;
   background: #1c253b52;
-  backdrop-filter: blur(5px);
+  backdrop-filter: none;
   z-index: 60;
   display: flex;
   align-items: center;
@@ -1678,9 +1613,9 @@ select {
   overflow: auto;
   background: #fff;
   border: 1px solid #e3e8ed;
-  border-radius: 17px;
+  border-radius: 3px;
   padding: 28px;
-  box-shadow: 0 24px 90px #1f2b3d33;
+  box-shadow: none;
 }
 .modal.wide {
   width: 830px;
@@ -1693,7 +1628,7 @@ select {
   gap: 15px;
 }
 .eyebrow {
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 1.3px;
   font-weight: 550;
   color: #a3ad99;
@@ -1722,7 +1657,7 @@ select {
   display: block;
   width: 100%;
   border: 1px solid #e1e6ec;
-  border-radius: 7px;
+  border-radius: 3px;
   padding: 11px 12px;
   margin-top: 7px;
   background: #fcfdfc;
@@ -1752,7 +1687,7 @@ select {
   gap: 9px;
   padding: 24px;
   border: 1px dashed #d8e2d0;
-  border-radius: 9px;
+  border-radius: 3px;
   background: #fafcf7;
   color: #9eae8b;
   cursor: pointer;
@@ -1791,7 +1726,7 @@ select {
   background: #f7f9f3;
   border: 1px solid #eaf0e2;
   padding: 12px;
-  border-radius: 7px;
+  border-radius: 3px;
 }
 .full-panel > .inline-notice {
   margin: 0 24px 10px;
@@ -1804,7 +1739,7 @@ select {
   color: #ad6557;
   background: #fcf2ef;
   padding: 12px;
-  border-radius: 6px;
+  border-radius: 3px;
   margin-top: 12px;
   line-height: 1.6;
 }
@@ -1841,7 +1776,7 @@ select {
 }
 .evidence-comparison article {
   border: 1px solid #e5e9ee;
-  border-radius: 10px;
+  border-radius: 3px;
   padding: 22px;
   background: #fafbfc;
   display: flex;
@@ -1868,7 +1803,7 @@ select {
   margin-top: 20px;
   background: #fbf7ee;
   border: 1px solid #f0e7d7;
-  border-radius: 10px;
+  border-radius: 3px;
   padding: 19px;
   color: #bc9b62;
 }
@@ -1884,7 +1819,7 @@ select {
   color: #a99b83;
 }
 .interpretation small {
-  font-size: 9px;
+  font-size: 10px;
   color: #b6ab97;
   display: block;
   margin-top: 11px;
@@ -1898,8 +1833,8 @@ select {
   max-height: 300px;
   overflow: auto;
   background: #fafbfc;
-  border: 1px solid #edf0f4;
-  border-radius: 9px;
+  border: 1px solid #deddd3;
+  border-radius: 3px;
   padding: 20px;
 }
 .report-reader p + p {
@@ -1917,7 +1852,7 @@ select {
   font-weight: 500;
 }
 .extracted-heading > span {
-  font-size: 9px;
+  font-size: 10px;
   color: #a6afba;
 }
 .extracted-list {
@@ -1928,8 +1863,8 @@ select {
 }
 .extracted-list article {
   padding: 13px;
-  border: 1px solid #edf0f4;
-  border-radius: 7px;
+  border: 1px solid #deddd3;
+  border-radius: 3px;
 }
 .extracted-list p {
   font-size: 11px;
@@ -1949,7 +1884,7 @@ select {
   gap: 12px;
   border: 1px solid var(--line);
   padding: 14px;
-  border-radius: 8px;
+  border-radius: 3px;
   color: #9caf8b;
 }
 .connection-cards b {
@@ -2006,7 +1941,7 @@ select {
   text-align: left;
   border: 1px solid var(--line);
   padding: 14px;
-  border-radius: 8px;
+  border-radius: 3px;
   color: #a1af96;
 }
 .search-results > button:hover {
@@ -2154,23 +2089,13 @@ select {
     min-width: 50px;
   }
   .metric-main p {
-    font-size: 7px;
+    font-size: 10px;
     gap: 4px;
   }
   .metric-main .metric-delta {
-    font-size: 8px;
+    font-size: 10px;
   }
-  .review-rings {
-    width: 56px;
-  }
-  .review-rings > svg:first-child {
-    height: 56px;
-  }
-  .review-rings > svg:last-child {
-    top: 20px;
-    left: 20px;
-    width: 15px;
-  }
+
   .metric-main strong .text-em {
     font-size: 12px;
     margin-left: 5px;
@@ -2192,12 +2117,9 @@ select {
   .change-item {
     gap: 9px;
   }
-  .change-icon {
-    width: 27px;
-    height: 27px;
-  }
+
   .change-eyebrow {
-    font-size: 7px;
+    font-size: 10px;
   }
   .thesis-bottom {
     flex-wrap: wrap;
@@ -2215,7 +2137,7 @@ select {
     min-height: 235px;
   }
   .metric-top {
-    font-size: 9px;
+    font-size: 10px;
   }
   .financial-bento .sm\:flex-row {
     flex-direction: column;
@@ -2242,17 +2164,15 @@ select {
   .sidebar-search > span {
     display: none;
   }
-  .memory-note {
-    padding: 11px 8px;
-  }
+
   .memory-note span {
     font-size: 10px;
   }
   .memory-note p {
-    font-size: 8px;
+    font-size: 10px;
   }
   .settings-nav {
-    font-size: 9px;
+    font-size: 10px;
   }
   .page-intro {
     align-items: flex-start;
@@ -2272,17 +2192,7 @@ select {
   .metric-main {
     height: 70px;
   }
-  .review-rings {
-    width: 48px;
-  }
-  .review-rings > svg:first-child {
-    height: 48px;
-  }
-  .review-rings > svg:last-child {
-    top: 17px;
-    left: 17px;
-    width: 14px;
-  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -2301,20 +2211,20 @@ select {
     font-size: 11px;
   }
   .change-eyebrow {
-    font-size: 8px;
+    font-size: 10px;
   }
   .change-item p {
     max-width: none;
   }
   .source-label,
   .subtle-link {
-    font-size: 9px;
+    font-size: 10px;
   }
   .thesis-bottom {
     flex-wrap: nowrap;
   }
   .badge {
-    font-size: 9px;
+    font-size: 10px;
   }
   .graph-wrap > svg {
     min-height: 0;
@@ -2355,10 +2265,10 @@ select {
     height: auto;
   }
   .review-banner > button {
-    font-size: 9px;
+    font-size: 10px;
   }
   .review-banner p {
-    font-size: 9px;
+    font-size: 10px;
   }
   .toast {
     left: calc(50% + 70px);
@@ -2417,7 +2327,7 @@ select {
   }
   .breadcrumbs {
     gap: 8px;
-    font-size: 9px;
+    font-size: 10px;
   }
   .breadcrumbs > span,
   .breadcrumbs > svg:nth-child(2) {
@@ -2430,7 +2340,7 @@ select {
     display: none;
   }
   .demo-pill {
-    font-size: 8px;
+    font-size: 10px;
     padding: 4px 6px;
   }
   main {
@@ -2442,7 +2352,7 @@ select {
   .company-logo {
     width: 36px;
     height: 36px;
-    border-radius: 9px;
+    border-radius: 3px;
   }
   .company-logo .nvidia-glyph {
     font-size: 26px;
@@ -2454,17 +2364,17 @@ select {
     font-size: 23px;
   }
   .company-heading p {
-    font-size: 8px;
+    font-size: 10px;
   }
   .ticker {
-    font-size: 8px;
+    font-size: 10px;
   }
   .dot-separator {
     margin-inline: 5px;
   }
   .heading-actions .button {
     padding: 8px 9px;
-    font-size: 9px;
+    font-size: 10px;
     gap: 4px;
   }
   .heading-actions .button svg {
@@ -2478,14 +2388,14 @@ select {
     font-size: 16px;
   }
   .page-intro p {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 1.7;
   }
   .comparison-selects {
     align-self: flex-start;
   }
   .comparison-selects select {
-    font-size: 9px;
+    font-size: 10px;
     max-width: 135px;
   }
   .tabs-row {
@@ -2510,13 +2420,9 @@ select {
     font-size: 10px;
   }
   .review-banner p {
-    font-size: 9px;
+    font-size: 10px;
   }
-  .banner-icon {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-  }
+
   .review-banner > button {
     font-size: 0;
     padding-top: 3px;
@@ -2546,34 +2452,24 @@ select {
     font-size: 29px;
   }
   .metric-main p {
-    font-size: 9px;
+    font-size: 10px;
     margin-top: 8px;
   }
   .metric-main .metric-delta {
     font-size: 10px;
   }
   .metric-foot {
-    font-size: 9px;
+    font-size: 10px;
     margin-top: 8px;
     padding: 10px 0;
   }
   .metric-foot button {
-    font-size: 9px;
+    font-size: 10px;
   }
   .metric-top {
     font-size: 11px;
   }
-  .review-rings {
-    width: 65px;
-  }
-  .review-rings > svg:first-child {
-    height: 65px;
-  }
-  .review-rings > svg:last-child {
-    top: 24px;
-    left: 24px;
-    width: 17px;
-  }
+
   .metric-main strong .text-em {
     font-size: 15px;
     margin-left: 9px;
@@ -2589,11 +2485,11 @@ select {
     font-size: 12px;
   }
   .panel-heading p {
-    font-size: 9px;
+    font-size: 10px;
   }
   .panel-heading select {
     max-width: 110px;
-    font-size: 8px;
+    font-size: 10px;
     padding-right: 17px;
   }
   .changes-list,
@@ -2611,7 +2507,7 @@ select {
     font-size: 10px;
   }
   .change-eyebrow {
-    font-size: 7px;
+    font-size: 10px;
     gap: 4px;
   }
   .change-arrow {
@@ -2624,19 +2520,19 @@ select {
     font-size: 10px;
   }
   .badge {
-    font-size: 8px;
+    font-size: 10px;
   }
   .subtle-link {
-    font-size: 8px;
+    font-size: 10px;
   }
   .graph-toolbar {
     padding: 9px;
   }
   .graph-toolbar > span {
-    font-size: 7px;
+    font-size: 10px;
   }
   .graph-toolbar select {
-    font-size: 7px;
+    font-size: 10px;
     max-width: 120px;
   }
   .graph-wrap {
@@ -2646,7 +2542,7 @@ select {
     min-height: 210px;
   }
   .legend {
-    font-size: 7px;
+    font-size: 10px;
     gap: 7px;
   }
   .graph-footer {
@@ -2665,7 +2561,7 @@ select {
     font-size: 10px;
   }
   .mix-rows small {
-    font-size: 8px;
+    font-size: 10px;
   }
   .ask-panel {
     padding: 16px;
@@ -2675,7 +2571,7 @@ select {
     font-size: 11px;
   }
   .ask-heading p {
-    font-size: 8px;
+    font-size: 10px;
   }
   .retrieval-label {
     display: none;
@@ -2684,13 +2580,13 @@ select {
     font-size: 10px;
   }
   .suggestions > button {
-    font-size: 8px;
+    font-size: 10px;
   }
   .ask-form {
     padding-left: 10px;
   }
   .page-footer {
-    font-size: 7px;
+    font-size: 10px;
     padding-block: 18px;
   }
   .page-footer > span {
@@ -2715,10 +2611,10 @@ select {
     font-size: 11px;
   }
   .thesis-list.full .subtle-link {
-    font-size: 9px;
+    font-size: 10px;
   }
   .thesis-list.full .badge {
-    font-size: 9px;
+    font-size: 10px;
   }
   .graph-wrap.large {
     margin: 0 9px 15px;
@@ -2732,13 +2628,13 @@ select {
   }
   .graph-wrap.large .graph-toolbar > span,
   .graph-wrap.large select {
-    font-size: 7px;
+    font-size: 10px;
   }
   .memory-documents {
     padding: 0 14px 14px;
   }
   .library-footnote {
-    font-size: 9px;
+    font-size: 10px;
     padding: 14px;
     align-items: flex-start;
     flex-wrap: wrap;
@@ -2749,7 +2645,7 @@ select {
   .modal {
     padding: 21px;
     max-height: calc(100dvh - 24px);
-    border-radius: 12px;
+    border-radius: 3px;
   }
   .modal h2 {
     font-size: 19px;
@@ -2790,14 +2686,14 @@ select {
     font-size: 10px;
   }
   .connection-cards small {
-    font-size: 9px;
+    font-size: 10px;
   }
   .connection-cards > div {
     gap: 8px;
     padding: 11px;
   }
   .connection-cards .badge {
-    font-size: 7px;
+    font-size: 10px;
   }
   .toast {
     left: 50%;
@@ -2815,7 +2711,7 @@ select {
     font-size: 16px;
   }
   .financial-intro p {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 1.8;
   }
   .financial-bento section {
@@ -2879,7 +2775,7 @@ select {
 }
 .timeline-events small {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   color: #a6afbb;
 }
 .timeline-events b {
@@ -2896,7 +2792,7 @@ select {
   margin-top: 6px;
 }
 .timeline-link {
-  font-size: 9px;
+  font-size: 10px;
   color: #94a780;
   margin-top: 10px;
   display: flex;
@@ -2942,13 +2838,13 @@ select {
   align-items: center;
   gap: 6px;
   border: 1px solid #e7ebf0;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 8px;
   color: #8c9aab;
   font-size: 10px;
 }
 .evidence-memory-links span {
-  font-size: 8px;
+  font-size: 10px;
   color: #b0b9c6;
 }
 .modal label > select {

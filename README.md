@@ -15,7 +15,7 @@ Open the printed local URL. `npm run build` produces `dist/`; `npm run preview` 
 
 Built with React 19, TypeScript, Vite, Tailwind 4, Lucide, and a shadcn-compatible structure. Reusable UI lives in `src/components/ui`; `components.json` maps the `@/components/ui` alias. This keeps generated shadcn components and project imports consistent. Global theme tokens and responsive styles are in `src/index.css`.
 
-The supplied Analytics Bento component is preserved in `src/components/ui/analytics-bento.tsx`, with small adaptations to chart labels and reporting periods. Its financial view uses actual quarterly observations rather than invented daily series. Original supplied component credit: vasnev.art.
+The supplied Analytics Bento component lives in `src/components/ui/analytics-bento.tsx`, adapted for financial reporting periods and the research-led visual design. `src/research.css` defines the paper-and-ink theme: serif section headings, monospaced numbers, ruled sections, plain status labels, and an asymmetric reading layout. Decorative rings, gradients, tinted icon tiles, glass effects, and card shadows are removed. Its financial view uses actual quarterly observations rather than invented daily series. Original supplied component credit: vasnev.art.
 
 ## What works without any keys
 

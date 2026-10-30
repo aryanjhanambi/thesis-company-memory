@@ -21,7 +21,6 @@ import {
   GitBranch,
   Globe,
   LayoutDashboard,
-  Lightbulb,
   Link2,
   LoaderCircle,
   MessageSquare,
@@ -32,7 +31,6 @@ import {
   Send,
   Settings2,
   ShieldCheck,
-  Sparkles,
   Target,
   TrendingUp,
   Upload,
@@ -151,7 +149,6 @@ function Modal({
       >
         <header>
           <div>
-            <span className="eyebrow">THESIS WORKSPACE</span>
             <h2 id="modal-title">{title}</h2>
           </div>
           <button className="icon-button" aria-label="Close dialog" onClick={onClose}>
@@ -165,7 +162,7 @@ function Modal({
 }
 function Sparkline({
   values,
-  color = '#729857',
+  color = '#3e644e',
   label,
 }: {
   values: number[];
@@ -271,7 +268,7 @@ function MemoryGraph({
                     y1={source.y}
                     x2={target.x}
                     y2={target.y}
-                    stroke={b === 'thesis' ? '#d4ad78' : '#d5dae1'}
+                    stroke={b === 'thesis' ? '#d4ad78' : '#bbbeb0'}
                     strokeWidth="1.5"
                     strokeDasharray={b === 'thesis' ? '5 4' : undefined}
                   />
@@ -317,14 +314,14 @@ function MemoryGraph({
                       ? '#edf5e7'
                       : n.id === 'thesis' || n.id === 'margin'
                         ? '#fff7e9'
-                        : '#f8fafb'
+                        : '#f6f4ed'
                   }
                   stroke={
                     selected === n.id
                       ? '#7fa462'
                       : n.id === 'margin' || n.id === 'thesis'
                         ? '#e2c89e'
-                        : '#d9dfe5'
+                        : '#c2c6b7'
                   }
                   strokeWidth={selected === n.id ? 2 : 1}
                 />
@@ -348,7 +345,7 @@ function MemoryGraph({
                       n.id === 'margin' || n.id === 'thesis'
                         ? '#d1a25f'
                         : n.type === 'Product'
-                          ? '#a09bc8'
+                          ? '#758f88'
                           : '#97aec8'
                     }
                   />
@@ -374,7 +371,7 @@ function MemoryGraph({
             Company
           </span>
           <span>
-            <i style={{ background: '#a09bc8' }} />
+            <i style={{ background: '#758f88' }} />
             Business
           </span>
           <span>
@@ -447,24 +444,22 @@ export default function App() {
     }
     if (current.imported || prior.imported) {
       const diff = compareClaims(extractClaims(prior.text), extractClaims(current.text));
-      diff.added
-        .slice(0, 20)
-        .forEach((c, i) =>
-          result.push({
-            id: `text-${i}`,
-            title: 'New passage to review',
-            category: c.category,
-            status: 'Unresolved',
-            summary: c.text.slice(0, 190),
-            old:
-              diff.removed.find((p) => p.category === c.category)?.text ||
-              'No matching passage in the previous report.',
-            next: c.text,
-            interpretation:
-              'Text matching found a new passage. This does not establish a change in business facts. Read both reports in context.',
-            section: 'Imported document · Extracted passage',
-          }),
-        );
+      diff.added.slice(0, 20).forEach((c, i) =>
+        result.push({
+          id: `text-${i}`,
+          title: 'New passage to review',
+          category: c.category,
+          status: 'Unresolved',
+          summary: c.text.slice(0, 190),
+          old:
+            diff.removed.find((p) => p.category === c.category)?.text ||
+            'No matching passage in the previous report.',
+          next: c.text,
+          interpretation:
+            'Text matching found a new passage. This does not establish a change in business facts. Read both reports in context.',
+          section: 'Imported document · Extracted passage',
+        }),
+      );
     }
     return result;
   }, [current, prior, isCurated]);
@@ -868,22 +863,12 @@ export default function App() {
           Add a company
         </button>
         <div className="sidebar-bottom">
-          <div className="memory-note">
-            <div>
-              <Sparkles size={16} />
-              <span>
-                A little more context.
-                <br />A lot more conviction.
-              </span>
-            </div>
-            <p>Your research compounds here.</p>
-          </div>
           <button className="settings-nav" onClick={() => setModal('settings')}>
             <Settings2 size={16} />
             Connections & settings
           </button>
           <button className="profile" onClick={() => setModal('help')}>
-            <span className="profile-avatar">AR</span>
+            <FolderOpen size={17} />
             <span>
               My workspace<small>Personal research</small>
             </span>
@@ -992,8 +977,8 @@ export default function App() {
           </div>
           <div className="page-intro">
             <div>
-              <h2>Your research, with a memory.</h2>
-              <p>Follow the business. Remember your reasoning. Know what changed.</p>
+              <h2>Quarterly review</h2>
+              <p>Compare disclosures against the assumptions behind your position.</p>
             </div>
             <div className="comparison-selects">
               <span>Compare</span>
@@ -1076,16 +1061,13 @@ export default function App() {
                 <>
                   {current && prior && current.id !== prior.id && (
                     <div className="review-banner">
-                      <span className="banner-icon">
-                        <Sparkles size={17} />
-                      </span>
                       <p>
-                        <strong>A new chapter in the company story.</strong> {comparisons.length}{' '}
-                        changes since {prior.period}
+                        <strong>{current.period} review</strong> {comparisons.length} changes since{' '}
+                        {prior.period}
                         {count > 0 && (
                           <>
                             {' '}
-                            · <b>{count} worth a closer look</b>
+                            · <b>{count} flagged for review</b>
                           </>
                         )}
                       </p>
@@ -1169,7 +1151,7 @@ export default function App() {
                             values={companyReports
                               .filter((r) => r.margin !== undefined && r.date <= current.date)
                               .map((r) => r.margin!)}
-                            color="#c4985b"
+                            color="#a16e3c"
                             label="Reported GAAP gross margin percent"
                           />
                         </div>
@@ -1205,39 +1187,20 @@ export default function App() {
                               </span>
                             </p>
                           </div>
-                          <div className="review-rings">
-                            <svg viewBox="0 0 80 80" aria-hidden="true">
-                              <circle
-                                cx="40"
-                                cy="40"
-                                r="30"
-                                fill="none"
-                                stroke="#edf0e8"
-                                strokeWidth="6"
-                              />
-                              <circle
-                                cx="40"
-                                cy="40"
-                                r="30"
-                                fill="none"
-                                stroke="#a5be8e"
-                                strokeWidth="6"
-                                strokeDasharray="125 189"
-                                transform="rotate(-90 40 40)"
-                              />
-                              <circle
-                                cx="40"
-                                cy="40"
-                                r="20"
-                                fill="none"
-                                stroke="#f1e3cd"
-                                strokeWidth="5"
-                                strokeDasharray="84 126"
-                                transform="rotate(-90 40 40)"
-                              />
-                            </svg>
-                            <Target size={17} />
-                          </div>
+                          <dl className="review-counts">
+                            <div>
+                              <dt>Supported</dt>
+                              <dd>
+                                {relevantTheses.filter((t) => t.status === 'Supported').length}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>Unresolved</dt>
+                              <dd>
+                                {relevantTheses.filter((t) => t.status === 'Unresolved').length}
+                              </dd>
+                            </div>
+                          </dl>
                         </div>
                         <div className="metric-foot">
                           <span>{theses.length} assumptions tracked</span>
@@ -1278,7 +1241,7 @@ export default function App() {
                           </h2>
                           <p>
                             {prior && current
-                              ? `${prior.period} → ${current.period} · Evidence before opinion`
+                              ? `${prior.period} → ${current.period} · Report comparison`
                               : 'Connect two reports to begin comparing'}
                           </p>
                         </div>
@@ -1308,19 +1271,6 @@ export default function App() {
                               key={c.id}
                               onClick={() => setEvidence(c)}
                             >
-                              <span
-                                className={`change-icon ${c.status === 'Needs review' ? 'amber-bg' : c.status === 'Supported' ? 'green-bg' : 'purple-bg'}`}
-                              >
-                                {c.category === 'Financials' ? (
-                                  <Activity size={17} />
-                                ) : c.category === 'Guidance' ? (
-                                  <TrendingUp size={17} />
-                                ) : c.category === 'Relationships' ? (
-                                  <Network size={17} />
-                                ) : (
-                                  <GitBranch size={17} />
-                                )}
-                              </span>
                               <div>
                                 <div className="change-eyebrow">
                                   {c.category}
@@ -1394,7 +1344,7 @@ export default function App() {
                     <section className="panel memory-panel">
                       <div className="panel-heading">
                         <div>
-                          <h2>Connect the bigger picture</h2>
+                          <h2>Business relationships</h2>
                           <p>Follow a relationship back to its evidence.</p>
                         </div>
                         <button
@@ -1431,10 +1381,10 @@ export default function App() {
                           </div>
                           <div className="segment-bar">
                             {[
-                              { value: current.dataCenter, color: '#a7c68d' },
-                              { value: current.gaming!, color: '#b1afd0' },
-                              { value: current.visualization!, color: '#e5c68c' },
-                              { value: current.auto!, color: '#9ab9cc' },
+                              { value: current.dataCenter, color: '#78967c' },
+                              { value: current.gaming!, color: '#9c9c89' },
+                              { value: current.visualization!, color: '#c2ac78' },
+                              { value: current.auto!, color: '#809a9a' },
                             ].map((s, i) => (
                               <div
                                 key={i}
@@ -1447,10 +1397,10 @@ export default function App() {
                           </div>
                           <div className="mix-rows">
                             {[
-                              ['Data Center', current.dataCenter, '#a7c68d'],
-                              ['Gaming', current.gaming, '#b1afd0'],
-                              ['Professional visualization', current.visualization, '#e5c68c'],
-                              ['Automotive', current.auto, '#9ab9cc'],
+                              ['Data Center', current.dataCenter, '#78967c'],
+                              ['Gaming', current.gaming, '#9c9c89'],
+                              ['Professional visualization', current.visualization, '#c2ac78'],
+                              ['Automotive', current.auto, '#809a9a'],
                             ].map(([name, value, color]) => (
                               <div key={name}>
                                 <span>
@@ -1465,7 +1415,6 @@ export default function App() {
                             ))}
                           </div>
                           <div className="mix-note">
-                            <Lightbulb size={15} />
                             <p>
                               Data Center contributes{' '}
                               {((current.dataCenter / current.revenue!) * 100).toFixed(1)}% of
@@ -1497,7 +1446,7 @@ export default function App() {
                 <section className="panel full-panel">
                   <div className="panel-heading">
                     <div>
-                      <h2>Make your reasoning explicit.</h2>
+                      <h2>Investment assumptions</h2>
                       <p>
                         Track assumptions, inspect the evidence, and record your review.{' '}
                         {checkedCount} of {theses.length} reviewed.
@@ -1527,7 +1476,7 @@ export default function App() {
                 <section className="panel full-panel">
                   <div className="panel-heading">
                     <div>
-                      <h2>The company story, connected.</h2>
+                      <h2>Company relationship record</h2>
                       <p>
                         Relationships carry evidence and a reporting period. Select a node to
                         inspect its source.
@@ -1573,7 +1522,7 @@ export default function App() {
                 <section className="panel full-panel">
                   <div className="panel-heading">
                     <div>
-                      <h2>Every chapter, in one place.</h2>
+                      <h2>Source documents</h2>
                       <p>Original reports and extracted evidence form your company memory.</p>
                     </div>
                     <button className="button" onClick={() => setModal('report')}>
@@ -1664,9 +1613,9 @@ export default function App() {
                       categories={{
                         title: 'Revenue by business platform',
                         groups: [
-                          { id: 'dc', name: 'Data Center', color: '#a7c68d', ink: 'dark' },
-                          { id: 'gaming', name: 'Gaming', color: '#b1afd0', ink: 'dark' },
-                          { id: 'other', name: 'Other platforms', color: '#e4c996', ink: 'dark' },
+                          { id: 'dc', name: 'Data Center', color: '#78967c', ink: 'dark' },
+                          { id: 'gaming', name: 'Gaming', color: '#9c9c89', ink: 'dark' },
+                          { id: 'other', name: 'Other platforms', color: '#b8aa81', ink: 'dark' },
                         ],
                         periods: seedReports.map((r, i) => ({
                           label: r.period,
@@ -1737,10 +1686,10 @@ export default function App() {
                         })),
                       }}
                       colors={{
-                        revenue: ['#bbd3a9', '#70964f'],
-                        desktop: ['#a7c68d', '#729857'],
-                        mobile: ['#cbc6e3', '#918ab5'],
-                        radar: '#8ba978',
+                        revenue: ['#3e644e', '#3e644e'],
+                        desktop: ['#78967c', '#3e644e'],
+                        mobile: ['#abb4ac', '#737e72'],
+                        radar: '#536b50',
                       }}
                     />
                     <div className="library-footnote">
@@ -1763,12 +1712,9 @@ export default function App() {
               )}
               <section className="ask-panel">
                 <div className="ask-heading">
-                  <span className="ask-icon">
-                    <Sparkles size={17} />
-                  </span>
                   <div>
                     <h2>Ask your company memory</h2>
-                    <p>Start with a question. Follow the evidence.</p>
+                    <p>Search reported figures and passages in the documents you have saved.</p>
                   </div>
                   <span className="retrieval-label">Evidence retrieval</span>
                 </div>
@@ -1839,7 +1785,7 @@ export default function App() {
           )}
           <footer className="page-footer">
             <span>
-              <span className="mini-brand">t·</span>Your reasoning. Your evidence. Your call.
+              <span className="mini-brand">t·</span>Company research · source-linked notes
             </span>
             <span>
               Historical demo ·{' '}
@@ -1878,9 +1824,8 @@ export default function App() {
             </article>
           </div>
           <div className="interpretation">
-            <Lightbulb size={20} />
             <div>
-              <h3>What this could mean for your thesis</h3>
+              <h3>Implication for the linked assumption</h3>
               <p>{evidence.interpretation}</p>
               <small>
                 Interpretation · Review required. Source passages above are concise paraphrases.
@@ -1976,7 +1921,7 @@ export default function App() {
         </Modal>
       )}
       {modal === 'report' && (
-        <Modal title="Add a new chapter" onClose={close}>
+        <Modal title="Import a report" onClose={close}>
           <p className="modal-description">
             Upload a report or paste its text. Each report stays connected to {company.name}.
           </p>
@@ -2059,7 +2004,7 @@ export default function App() {
         </Modal>
       )}
       {modal === 'thesis' && (
-        <Modal title={editing ? 'Refine your reasoning' : 'What do you believe?'} onClose={close}>
+        <Modal title={editing ? 'Edit assumption' : 'New investment assumption'} onClose={close}>
           <form
             onSubmit={(e) => {
               e.preventDefault();

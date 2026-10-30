@@ -13,8 +13,8 @@ export function CompanyTimeline({
     <section className="panel timeline-panel">
       <div className="panel-heading">
         <div>
-          <h2>A story that builds over time</h2>
-          <p>Each report adds a chapter. Your earlier evidence stays in view.</p>
+          <h2>Reporting history</h2>
+          <p>Published reports and the observations recorded for each period.</p>
         </div>
         <GitBranch size={17} className="muted" />
       </div>
@@ -32,11 +32,11 @@ export function CompanyTimeline({
                 : r.id === 'nvda-q2'
                   ? 'Revenue grows. Margins soften.'
                   : r.id === 'nvda-q3'
-                    ? 'Demand builds. The thesis evolves.'
-                    : 'New evidence added to memory'}
+                    ? 'Data Center grows; margin outlook falls.'
+                    : 'Imported document; passages await review'}
             </p>
             <span className="timeline-link">
-              {i === 0 ? 'Open first chapter' : 'Inspect report'}
+              {i === 0 ? 'Inspect baseline' : 'Inspect report'}
               <ArrowUpRight size={11} />
             </span>
           </button>

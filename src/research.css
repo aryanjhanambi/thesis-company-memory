@@ -1,0 +1,1044 @@
+/* Research ledger: paper, ink, rules, and data rather than a grid of cards. */
+:root {
+  --paper: #f4f1ea;
+  --ink: #252820;
+  --rule: #d1d3c6;
+  --forest: #3e644e;
+  --rust: #925236;
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+.sidebar {
+  background: #eae8df;
+  border-color: #d1d3c6;
+}
+.brand {
+  font-family: Georgia, serif;
+  font-weight: 600;
+  font-size: 30px;
+}
+.brand-mark {
+  color: var(--forest);
+  background: transparent;
+  padding: 0;
+  width: 20px;
+  margin-right: 6px;
+}
+.brand-mark > span,
+.brand-period {
+  color: var(--forest);
+}
+.sidebar-search {
+  background: transparent;
+  border-color: #c8ccbd;
+  color: #626a5a;
+}
+.sidebar-search > span {
+  border: 0;
+  color: #6a7362;
+}
+.sidebar nav > button {
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  color: #5b6657;
+}
+.sidebar nav > button.active {
+  background: transparent;
+  color: #243c2c;
+  border-left-color: #3e644e;
+}
+.sidebar nav > button:hover {
+  background: #dfe2d6;
+}
+.nav-count,
+.count-pill,
+.tabs > button > span {
+  background: transparent;
+  border: 0;
+  color: #6d7564;
+  padding: 0;
+}
+.sidebar-section-title,
+.workspace-label {
+  color: #6d7565;
+  letter-spacing: 1.1px;
+}
+.company-list > button.selected {
+  background: #dedfd4;
+}
+.company-avatar,
+.company-avatar.nvda {
+  background: transparent;
+  border: 0;
+  color: #47634b;
+}
+.company-list small {
+  color: #737b6a;
+}
+.profile {
+  color: #51604e;
+  gap: 10px;
+}
+.profile small {
+  color: #727a68;
+}
+.settings-nav,
+.add-company {
+  color: #606c58;
+}
+.topbar {
+  background: transparent;
+  border-bottom: 1px solid #d9dbcf;
+}
+.breadcrumbs,
+.breadcrumbs > b {
+  color: #6a7263;
+}
+.demo-pill {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: #6d7567;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+}
+.demo-pill > span {
+  display: none;
+}
+main {
+  max-width: 1410px;
+  padding-top: 36px;
+}
+.company-logo {
+  display: none;
+}
+h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 38px;
+  font-weight: 400;
+  letter-spacing: -1px;
+}
+.company-heading p {
+  color: #697460;
+  font-size: 11px;
+  margin-top: 7px;
+}
+.watching {
+  color: #697760;
+  font-size: 10px;
+}
+.ticker.company-picker {
+  border: 0;
+  background: transparent;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #596950;
+  max-width: 90px;
+}
+.button {
+  background: transparent;
+  border-color: #adb6a1;
+  color: #42543c;
+  border-radius: 2px;
+  box-shadow: none;
+  font-size: 12px;
+}
+.button:hover {
+  background: #e5e7dc;
+  border-color: #718064;
+}
+.button.primary {
+  background: #304d39;
+  border-color: #304d39;
+  color: #fffdf6;
+}
+.button.primary:hover {
+  background: #41634b;
+}
+.page-intro {
+  margin-top: 32px;
+  align-items: flex-end;
+}
+.page-intro h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+.page-intro p {
+  font-size: 12px;
+  color: #68735f;
+  margin-top: 8px;
+}
+.comparison-selects {
+  font-size: 11px;
+  color: #687660;
+}
+select {
+  border-color: #bec7b3;
+  color: #4c6046;
+  background-color: transparent;
+  border-radius: 2px;
+  font-size: 11px;
+}
+.tabs-row {
+  border-color: #adb7a0;
+}
+.tabs {
+  gap: 25px;
+}
+.tabs > button {
+  font-size: 12px;
+  color: #727b68;
+}
+.tabs > button.selected {
+  color: #304c38;
+}
+.tabs > button.selected:after {
+  background: #36583d;
+}
+.snapshot-label {
+  font-family: 'IBM Plex Mono', monospace;
+  color: #717d65;
+}
+.snapshot-label > span {
+  display: none;
+}
+.review-banner {
+  padding: 14px 0;
+  border: 0;
+  border-bottom: 1px solid #c7cdbb;
+  background: transparent;
+  border-radius: 0;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #6c785e;
+}
+.review-banner strong {
+  color: #3e5838;
+  font-weight: 600;
+  margin-right: 13px;
+}
+.review-banner b {
+  color: #925236;
+}
+.review-banner > button {
+  font-size: 11px;
+  color: #3e5838;
+}
+.panel {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #9da98d;
+  border-radius: 0;
+  box-shadow: none;
+}
+.metric-grid {
+  border-bottom: 1px solid #9da98d;
+  margin-top: 0;
+  gap: 0;
+  grid-template-columns: 1fr 1fr 1.17fr;
+}
+.metric-card {
+  border: 0;
+  border-right: 1px solid #d1d5c6;
+  padding: 21px 23px 0;
+}
+.metric-card:first-child {
+  padding-left: 0;
+}
+.metric-card:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.metric-top {
+  color: #56674d;
+  font-size: 12px;
+}
+.metric-top > svg {
+  display: none;
+}
+.metric-top small {
+  background: transparent;
+  color: #717d62;
+}
+.metric-main {
+  margin-top: 13px;
+  height: 76px;
+}
+.metric-main strong {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 31px;
+  letter-spacing: -1.7px;
+  font-weight: 400;
+}
+.metric-main strong .text-em {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: #65755a;
+}
+.metric-main p {
+  color: #707d65;
+  font-size: 10px;
+  gap: 7px;
+}
+.metric-main .metric-delta {
+  font-size: 10px;
+}
+.green {
+  color: #3e644e;
+}
+.amber {
+  color: #925236;
+}
+.metric-foot {
+  border-top: 0;
+  color: #748066;
+  font-size: 10px;
+  padding: 13px 0;
+}
+.metric-foot button {
+  color: #586e4b;
+  font-size: 10px;
+}
+.review-counts {
+  margin: 0 0 0 8px;
+  min-width: 90px;
+  font-size: 10px;
+  line-height: 1.7;
+  color: #70805f;
+}
+.review-counts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.review-counts dd {
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #4a6340;
+}
+.dashboard-grid {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+  margin-top: 33px;
+}
+.panel-heading {
+  padding: 19px 0 18px;
+  align-items: flex-start;
+}
+.panel-heading h2 {
+  font-size: 17px;
+  font-family: Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  color: #32492d;
+}
+.panel-heading p {
+  font-size: 11px;
+  color: #737e66;
+  line-height: 1.65;
+}
+.panel-heading select {
+  background: transparent;
+  font-size: 10px;
+  border-color: #c0c9b4;
+}
+.changes-list,
+.thesis-list {
+  padding: 0;
+}
+.change-item {
+  padding: 19px 0 20px;
+  gap: 12px;
+  border-color: #d6d9cb;
+}
+.change-item:hover {
+  background: #eceee3;
+}
+.change-eyebrow {
+  font-size: 10px;
+  color: #768267;
+  margin-bottom: 9px;
+  gap: 7px;
+}
+.change-item h3 {
+  font-family: Georgia, serif;
+  font-size: 19px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+  color: #2f482c;
+}
+.change-item p {
+  font-size: 12px;
+  color: #727e66;
+  line-height: 1.8;
+  margin-top: 8px;
+  max-width: 540px;
+}
+.source-label {
+  color: #5c7250;
+  font-size: 10px;
+  margin-top: 11px;
+}
+.change-arrow {
+  color: #718568;
+}
+.panel-bottom-link {
+  border-top: 1px solid #cdd3bf;
+  justify-content: flex-start;
+  padding: 13px 0;
+  font-size: 11px;
+  color: #526b45;
+}
+.panel-bottom-link:hover {
+  background: transparent;
+  color: #304d39;
+  text-decoration: underline;
+}
+.thesis-item {
+  border-color: #d6d9cb;
+  padding: 20px 0;
+  gap: 12px;
+}
+.thesis-number {
+  color: #889177;
+  font-size: 10px;
+  padding-top: 3px;
+}
+.thesis-item-top h3 {
+  font-size: 13px;
+  color: #42543b;
+  font-weight: 500;
+}
+.thesis-content > p {
+  font-size: 12px;
+  color: #758168;
+  line-height: 1.8;
+}
+.thesis-bottom {
+  align-items: baseline;
+  margin-top: 13px;
+  gap: 12px;
+}
+.badge {
+  border: 0;
+  padding: 0 0 2px;
+  border-bottom: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.badge > span {
+  display: none;
+}
+.badge.positive {
+  color: #456c43;
+  border-color: #7c9b6f;
+  background: transparent;
+}
+.badge.warning {
+  color: #a05d37;
+  border-color: #bd9175;
+  background: transparent;
+}
+.badge.neutral {
+  color: #75816b;
+  border-color: #a1ac94;
+  background: transparent;
+}
+.subtle-link {
+  font-size: 10px;
+  color: #77866b;
+}
+.graph-wrap {
+  margin: 0 0 15px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  background-image: none;
+}
+.graph-toolbar {
+  padding: 0 0 12px;
+}
+.graph-toolbar > span {
+  color: #7b886d;
+  font-size: 10px;
+}
+.graph-toolbar select {
+  color: #5d7450;
+  background: transparent;
+  font-size: 10px;
+  border-color: #c2ccb6;
+}
+.graph-footer {
+  padding: 12px 0;
+}
+.legend {
+  font-size: 10px;
+  color: #78876b;
+}
+.zoom-controls {
+  border-color: #bdc8b0;
+  background: transparent;
+  font-size: 10px;
+  color: #667d56;
+}
+.mix-total {
+  padding: 0;
+}
+.mix-total > strong {
+  font-family: 'IBM Plex Mono', monospace;
+  color: #324d2d;
+  font-size: 29px;
+  font-weight: 400;
+}
+.mix-total > span {
+  font-size: 10px;
+  color: #7b886d;
+}
+.segment-bar {
+  margin: 22px 0 12px;
+  height: 15px;
+  gap: 2px;
+  border-radius: 0;
+}
+.segment-bar > div {
+  border-radius: 0;
+}
+.mix-rows {
+  padding: 0;
+}
+.mix-rows > div {
+  border-color: #d6dccc;
+  font-size: 11px;
+  padding: 12px 0;
+}
+.mix-rows > div > span {
+  color: #748569;
+}
+.mix-rows b {
+  color: #49683e;
+  font-size: 11px;
+}
+.mix-rows small {
+  font-size: 10px;
+  color: #839274;
+}
+.mix-note {
+  margin: 17px 0;
+  padding-left: 11px;
+  border-left: 2px solid #9cab86;
+}
+.mix-note p {
+  font-size: 11px;
+  color: #75896a;
+}
+.timeline-panel {
+  margin-top: 35px;
+}
+.timeline-events {
+  padding: 0 0 23px;
+}
+.timeline-events > button {
+  padding-top: 24px;
+  border-top-color: #a6b592;
+}
+.timeline-point {
+  border: 0;
+  border-radius: 0;
+  background: var(--paper);
+  color: #6f8a5c;
+  justify-content: flex-start;
+}
+.timeline-events small {
+  font-size: 10px;
+  color: #7c8d6e;
+}
+.timeline-events b {
+  color: #48663c;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+}
+.timeline-events p {
+  font-size: 11px;
+  color: #7b8d6d;
+}
+.timeline-link {
+  font-size: 10px;
+  color: #60844e;
+}
+.ask-panel {
+  margin-top: 15px;
+  border: 0;
+  border-top: 2px solid #748764;
+  border-radius: 0;
+  background: transparent;
+  padding: 23px 0 0;
+}
+.ask-heading h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #3d5c33;
+  font-size: 19px;
+}
+.ask-heading p {
+  font-size: 11px;
+  color: #7d8e6c;
+}
+.retrieval-label {
+  color: #82966e;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+}
+.ask-form {
+  border: 1px solid #b8c5a7;
+  background: #faf9f3;
+  border-radius: 2px;
+  padding: 6px 7px 6px 13px;
+}
+.ask-form input {
+  font-size: 12px;
+  color: #4f6c43;
+}
+.ask-form input::placeholder {
+  color: #879878;
+}
+.ask-form button {
+  background: #e6eadb;
+  color: #526f43;
+  border-radius: 1px;
+}
+.suggestions {
+  gap: 14px;
+}
+.suggestions > button {
+  border: 0;
+  border-bottom: 1px solid #b9c5aa;
+  border-radius: 0;
+  background: transparent;
+  padding: 3px 0;
+  color: #6b8658;
+  font-size: 10px;
+}
+.suggestions > button:hover {
+  background: transparent;
+  color: #3d6133;
+}
+.answer {
+  border-color: #c7d1b9;
+}
+.answer > p {
+  color: #5b754d;
+  font-size: 13px;
+}
+.answer-evidence button {
+  border: 0;
+  border-left: 2px solid #a7b88e;
+  border-radius: 0;
+  background: transparent;
+  color: #7d916d;
+  font-size: 11px;
+}
+.page-footer {
+  border-top: 1px solid #d2d9c5;
+  margin-top: 30px;
+  font-size: 10px;
+  color: #7f9070;
+}
+.page-footer button {
+  font-size: 10px;
+}
+.mini-brand {
+  color: #5f8050;
+}
+.modal-overlay {
+  background: #25282070;
+  backdrop-filter: none;
+}
+.modal {
+  background: #f9f7f0;
+  border-color: #b5c0a7;
+  border-radius: 3px;
+  box-shadow: none;
+}
+.modal h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #3e5c34;
+  font-size: 25px;
+  margin-top: 0;
+}
+.modal-description {
+  color: #7a8c69;
+}
+.modal input:not([type='file']),
+.modal textarea {
+  background: #fffdf8;
+  border-color: #c8d0bb;
+  border-radius: 2px;
+  color: #5d7750;
+}
+.modal label.upload-zone {
+  border-radius: 2px;
+  background: transparent;
+  border-color: #b8c5a7;
+}
+.inline-notice {
+  background: transparent;
+  border: 0;
+  border-left: 2px solid #b3c19d;
+  border-radius: 0;
+  color: #7d916b;
+}
+.evidence-comparison article {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #a9b995;
+  border-radius: 0;
+  padding: 20px 0;
+}
+.evidence-comparison article:nth-child(2) {
+  background: transparent;
+  border-color: #a9b995;
+  padding-left: 20px;
+  border-left: 1px solid #ced7c0;
+}
+.evidence-comparison article > p {
+  color: #5b7750;
+}
+.interpretation {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #cab99e;
+  border-radius: 0;
+  padding: 20px 0;
+  color: #93704c;
+}
+.interpretation h3 {
+  color: #8f613b;
+}
+.interpretation p {
+  color: #927450;
+}
+.financial-bento section {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-top: 1px solid #9daa8c;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.financial-bento [class*='rounded'] {
+  border-radius: 2px;
+}
+.financial-bento .shadow-sm,
+.financial-bento .shadow-lg {
+  box-shadow: none;
+}
+.financial-bento .bg-card {
+  background: transparent;
+}
+.financial-bento .bg-muted\/40 {
+  background: transparent;
+}
+.full-panel > .panel-heading h2 {
+  font-family: Georgia, serif;
+  font-size: 23px;
+}
+.financial-intro h2 {
+  font-family: Georgia, serif;
+  font-size: 23px;
+  font-weight: 400;
+}
+.financial-intro p {
+  color: #7d916b;
+  font-size: 11px;
+}
+.report-row:hover {
+  background: #e9edde;
+}
+.document-icon {
+  background: transparent;
+  border: 0;
+  color: #768f62;
+}
+.memory-documents button,
+.connection-cards > div {
+  background: transparent;
+  border-radius: 2px;
+}
+.notes-panel textarea {
+  background: transparent;
+}
+.report-table-head {
+  background: transparent;
+  color: #778e64;
+}
+.report-row b {
+  color: #597c46;
+}
+.report-row {
+  color: #879d75;
+}
+.report-row small {
+  color: #8fa77a;
+}
+@media (max-width: 1190px) {
+  .dashboard-grid {
+    gap: 25px;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .metric-card {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .metric-main strong {
+    font-size: 27px;
+  }
+  .review-counts {
+    min-width: 75px;
+    font-size: 10px;
+  }
+  .change-item h3 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 1000px) {
+  .metric-main .sparkline {
+    display: none;
+  }
+  .review-counts {
+    display: none;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .metric-main strong {
+    font-size: 25px;
+  }
+  .metric-main strong .text-em {
+    display: block;
+    font-size: 12px;
+    margin: 5px 0 0;
+  }
+  .page-intro {
+    align-items: flex-start;
+  }
+}
+@media (max-width: 700px) {
+  .sidebar {
+    width: 54px;
+    padding-inline: 4px;
+  }
+  .main-shell {
+    margin-left: 54px;
+  }
+  .brand-mark {
+    margin: 0;
+    color: #365e40;
+  }
+  .sidebar .brand {
+    font-size: 0;
+  }
+  .sidebar nav > button {
+    padding: 11px 10px;
+    border-radius: 0;
+  }
+  main {
+    padding: 25px 17px 0;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  .heading-line {
+    gap: 7px;
+  }
+  .company-heading p {
+    font-size: 10px;
+  }
+  .button {
+    font-size: 11px;
+  }
+  .page-intro {
+    margin-top: 24px;
+    gap: 16px;
+  }
+  .page-intro h2 {
+    font-size: 11px;
+  }
+  .page-intro p {
+    font-size: 11px;
+  }
+  .comparison-selects {
+    gap: 8px;
+  }
+  .comparison-selects select {
+    font-size: 10px;
+  }
+  .tabs {
+    gap: 21px;
+  }
+  .tabs > button {
+    font-size: 11px;
+  }
+  .review-banner {
+    align-items: center;
+    padding-block: 13px;
+  }
+  .review-banner strong {
+    display: block;
+    font-size: 12px;
+  }
+  .review-banner p {
+    font-size: 11px;
+  }
+  .review-banner > button {
+    font-size: 0;
+  }
+  .metric-grid {
+    grid-template-columns: 1fr;
+    border: 0;
+  }
+  .metric-card,
+  .metric-card:first-child,
+  .metric-card:last-child {
+    padding: 18px 0 0;
+    border: 0;
+    border-bottom: 1px solid #c4cfb6;
+  }
+  .metric-top {
+    font-size: 12px;
+  }
+  .metric-main strong {
+    font-size: 31px;
+  }
+  .metric-main strong .text-em {
+    display: inline;
+    margin-left: 8px;
+  }
+  .metric-main .sparkline {
+    display: block;
+  }
+  .review-counts {
+    display: block;
+    min-width: 94px;
+  }
+  .dashboard-grid {
+    margin-top: 28px;
+    gap: 28px;
+  }
+  .panel-heading {
+    padding: 18px 0;
+  }
+  .panel-heading h2 {
+    font-size: 18px;
+  }
+  .panel-heading p {
+    font-size: 11px;
+  }
+  .panel-heading select {
+    max-width: 105px;
+    font-size: 10px;
+  }
+  .change-item h3 {
+    font-size: 19px;
+  }
+  .change-item p,
+  .thesis-content > p {
+    font-size: 12px;
+  }
+  .change-eyebrow {
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+  .thesis-item-top h3 {
+    font-size: 13px;
+  }
+  .thesis-bottom {
+    flex-wrap: wrap;
+  }
+  .graph-wrap {
+    margin: 0;
+  }
+  .graph-toolbar {
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .graph-toolbar > span {
+    max-width: 130px;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .graph-toolbar select {
+    font-size: 10px;
+    max-width: 135px;
+  }
+  .graph-wrap > svg {
+    min-height: 0;
+  }
+  .legend {
+    gap: 9px;
+    font-size: 10px;
+  }
+  .timeline-panel {
+    margin-top: 30px;
+  }
+  .timeline-events {
+    padding: 0 0 20px;
+  }
+  .ask-panel {
+    padding: 20px 0 0;
+  }
+  .ask-heading h2 {
+    font-size: 19px;
+  }
+  .ask-heading p {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .ask-form input {
+    font-size: 11px;
+  }
+  .suggestions {
+    gap: 8px 14px;
+  }
+  .suggestions > button {
+    font-size: 10px;
+  }
+  .mix-total,
+  .mix-rows {
+    padding: 0;
+  }
+  .mix-rows > div,
+  .mix-rows b {
+    font-size: 11px;
+  }
+  .segment-bar {
+    margin-inline: 0;
+  }
+  .mix-note {
+    margin-inline: 0;
+  }
+  .page-footer {
+    font-size: 10px;
+    line-height: 1.8;
+  }
+  .full-panel > .panel-heading h2 {
+    font-size: 21px;
+  }
+  .evidence-comparison article:nth-child(2) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
