@@ -2,7 +2,59 @@
 
 A market-shock investigation lab. Trace dated business relationships, inspect their evidence, form a hypothesis and test a basket before risking money. The earlier company-memory dashboard remains available from **Company memory**.
 
-## Shock lab: start here
+## Research Watchtower (implemented)
+
+The backend now runs a durable research worker, not a browser-only agent animation. It searches Exa for official announcements and filings, extracts relationship claims using Nosana inference, checks source quotes, and persists proposed graph changes in Neo4j. All changes require review in **Watchtower**. Additions, updates, disputes, reopenings and retirements append versions; no old evidence is deleted.
+
+### Plug-in setup on Railway
+
+Add these **backend-only** variables to the existing Railway service:
+
+```dotenv
+API_TOKEN=<a long random access token you create>
+EXA_API_KEY=<Exa key>
+NOSANA_API_KEY=<Nosana key>
+NEO4J_URI=<Neo4j connection URI, usually neo4j+s://...>
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=<Neo4j password>
+DAYTONA_API_KEY=<Daytona key, needed for sandbox backtests and report extraction>
+```
+
+Neo4j is a database connection, not just an API key; an active database is required. `NEO4J_DATABASE` defaults to `neo4j`. The database account needs read/write and schema-constraint permissions. Secrets are never embedded in frontend builds.
+
+The Dockerfile now builds and serves **both dashboard and API** on Railway's injected PORT. Generate a public Railway domain with target port 8787 (or the injected PORT if changed). Open that URL and enter API_TOKEN in **Connections**; the API URL defaults to the current origin. Same-origin access needs no CORS variable. If using the existing GitHub Pages frontend instead, set `ALLOWED_ORIGIN=https://aryanjhanambi.github.io` on Railway and enter its API URL in Connections. `VITE_API_URL` may contain a public URL, never keys.
+
+Nosana's managed API at `https://inference.nosana.com/v1` is supported: the standard key is sufficient, and the worker discovers a currently serving model with adequate context. Optionally pin `NOSANA_MODEL`, or override `NOSANA_INFERENCE_URL` and `NOSANA_INFERENCE_KEY` for a private compatible deployment. An exhausted account or unavailable model produces an explicit error, never fake research.
+
+After deployment:
+
+1. Open **Watchtower → Check live setup**. This initializes/verifies Neo4j, makes one authenticated Exa search, and requests a short Nosana response. It consumes one search from the app's daily allowance.
+2. **Scan now** returns immediately with a durable run ID. Activity and proposals refresh while the tab is open; the backend job continues after the browser closes.
+3. Open a proposal, compare the old and proposed relationship, inspect the quote and original source, and verify the publication/effective dates. Check the review acknowledgement, then approve or reject. Concurrent updates are protected by an expected-version check; refresh the comparison if another review changed its baseline.
+4. **Open approved graph** loads the current database-backed projection. Changing its replay date continues querying live history; it never silently substitutes the curated demo. **Use curated example** explicitly returns to the historical demonstration.
+
+### Scheduling, bounds and persistence
+
+- Initial coverage is MSFT, NVDA, TSM, DELL and SMCI; AMZN can be added in the UI. Entity resolution is intentionally bounded to these six companies. The agent can discover relationships between them, not arbitrary new ticker identities.
+- Default schedule: daily. Choose hourly, six-hourly, daily or weekly in Watchtower. Settings are stored in Neo4j and survive redeployments. Keep Railway Serverless/sleeping **off** for an always-running worker; this does not rely on Exa webhooks or a Codex automation.
+- The scheduler ticks once a minute, runs when its persisted due time arrives, and starts once all required credentials are present. `AGENT_ENABLED=false` is an environment-level automatic-scheduling kill switch. Manual scans remain possible. Pausing in the UI prevents future scheduled runs, not a run already underway.
+- Defaults: 12 Exa requests per UTC day across scans and setup checks, 3 results per company search, at most 6 source-extraction attempts per run, a 90-day publication window, 12,000 characters per source, and an eight-minute job deadline. `AGENT_MAX_SEARCHES_PER_DAY`, `AGENT_MAX_SOURCES_PER_RUN` and initial `AGENT_INTERVAL_MINUTES` are configurable within hard bounds. These are request caps, not guarantees about provider dollar costs.
+- A Neo4j write lease prevents overlapping workers, with a one-minute manual cooldown and recovery after a 15-minute abandoned lease. There is no unbounded retry loop. Completed sources survive a failed/interrupted run; malformed model output can be retried on a later scan.
+- Canonical URL + content hash deduplication prevents the same source snapshot from generating proposals repeatedly. Changed returned text can produce a new snapshot. Missing dates, future publication dates, non-allowlisted domains, unsupported entities, fabricated quotes and unsupported retirement claims are rejected. Model validation is structural and source-anchored, not proof of truth; review remains essential.
+- Source snapshots, runs, activity, review decisions and graph versions persist in Neo4j. The UI shows the latest 15 runs, 100 proposals and 100 events; it does not purge older database history. Review is attributed to the shared API-token workspace, not individual signed-in users.
+- Live replay uses publication date **and** discovery/approval timestamps, and honors effective dates. An announced future plan can appear as a plan before its effective date; a future-effective retirement does not hide an active relationship early. A source discovered today cannot enter an older known-at-the-time backtest. Curated historical mode is explicitly reconstructed, not vintage data.
+
+New protected routes: `GET /api/agent/status`, `POST /api/agent/scan`, `POST /api/agent/check`, `POST /api/agent/config`, `POST /api/agent/proposals/:id/review`, and `GET /api/agent/history?id=...`.
+
+The live graph model is `(MarketCompany)-[:HAS_EXPOSURE_VERSION]->(ExposureVersion)-[:TO_COMPANY]->(MarketCompany)`, with ResearchSource, ResearchProposal, ResearchRun, ResearchEvent, ResearchControl and ResearchBudget records. Queries are parameterized. Replay projects the latest eligible version before computing bounded exposure paths; ended relationships remain in history but not the active map.
+
+### Verification boundary
+
+The complete scan → deduplicate → review → version → retire → restart workflow is tested against a real temporary Neo4j database, including HTTP routing, stale-review conflicts and durable budgets. Exa/Nosana responses are simulated in automated tests; actual external-provider access cannot be proven until valid keys and credits are available. Run the live setup check when keys arrive. There is still no automatic stock-price feed, brokerage execution, universal entity discovery or model-training pipeline.
+
+GitHub Actions runs the same database integration test using a disposable Neo4j service container. Locally, opt in with `TEST_NEO4J_URI=bolt://127.0.0.1:17687` and `TEST_NEO4J_PASSWORD=thesis-local-qa-only`. It refuses any other host/password or a nonempty database; it cleans up only the fixtures it created in that disposable database.
+
+## Using the investigation lab
 
 1. **Investigate:** choose an AI-spending, foundry, or server-demand scenario. These are hypothetical scenarios, not live news. Inspect one- or two-hop connections and their original sources.
 2. **Replay:** use a cutoff date or a timeline stop. Only relationships published by that date appear. The March 18, 2024 Blackwell announcement supplies five curated relationships across six companies. Announced plans are distinguished from reported manufacturing facts; neither implies a quantified financial exposure.
@@ -13,9 +65,9 @@ A market-shock investigation lab. Trace dated business relationships, inspect th
 
 ### Integration boundaries
 
-- **Neo4j:** Connections → **Load curated graph into Neo4j** idempotently writes `(MarketCompany)-[:EXPOSURE]->(MarketCompany)` with source URL, publication date, relationship ID and evidence note. **Query Neo4j** traverses up to two hops and filters _every_ relationship by cutoff. Without keys, the same small graph runs in-browser and is labelled local. This does not automatically discover or resolve arbitrary company supply chains.
+- **Neo4j:** Connections → **Load curated graph into Neo4j** idempotently inserts baseline ExposureVersion records without overwriting approved changes. **Query Neo4j** projects the latest eligible versions and computes up to two exposure hops. Live mode requires publication, discovery and approval by the cutoff. Without keys, the small curated reconstruction runs in-browser and is labelled local. Watchtower adds reviewed relationships within the six-company registry, not universal company discovery.
 - **Daytona:** choosing sandbox execution sends validated price inputs to the protected Railway API. It uploads the same fixed JavaScript backtest engine, not user code, runs it in a network-blocked sandbox with bounded resources/time, and deletes the sandbox in `finally`, with automatic cleanup as a fallback. No financial API credentials are sent to it. The engine runs without installing dependencies. The earlier report extractor continues to use Python.
-- **Nosana:** optional evidence explanations through a Nosana-hosted vLLM/OpenAI-compatible deployment. Set backend-only `NOSANA_INFERENCE_URL` (base including `/v1`), `NOSANA_MODEL`, and optional `NOSANA_INFERENCE_KEY`. **Ask Nosana model** sends only eligible curated evidence and requests cited edge IDs plus counterarguments. Output is labelled model-generated and needs verification. The adapter does not provision GPUs, train models, validate generated citations, or prove that an arbitrarily configured endpoint is hosted by Nosana.
+- **Nosana:** managed inference with `NOSANA_API_KEY` and automatic serving-model discovery, or a private compatible endpoint using the overrides described above. **Ask Nosana model** sends eligible evidence and requests cited edge IDs plus counterarguments. Output is labelled model-generated and needs verification. No GPUs are provisioned and no models are trained by this app. An arbitrary custom endpoint is not proof of Nosana hosting.
 
 Protected new routes:
 
@@ -26,7 +78,7 @@ Protected new routes:
 | `POST /api/shocks/backtest`                       | Validate input and execute the fixed engine in Daytona           |
 | `POST /api/shocks/explain`                        | Explain date-eligible evidence using the configured Nosana model |
 
-Provider errors never silently fall back to demo results. Provider adapters are covered by mocked contract tests, but live GPU/sandbox/database execution still requires keys and has not been verified in this credential-free environment.
+Provider errors never silently fall back to demo results. Real Neo4j transactions and mocked provider contracts are tested; external Exa/Nosana/Daytona availability still requires valid keys and credits and has not been live-verified here.
 
 ### Research limits
 
@@ -77,7 +129,7 @@ With a backend connected, searching a ticker calls `GET /api/reports/discover?ti
 
 ## Live Daytona + Neo4j backend
 
-GitHub Pages serves static files. It cannot hold secrets or run this API. The included Express backend must run on a separate Node/container host.
+GitHub Pages serves static files and cannot hold secrets or run this API. Railway can now serve both the frontend and Express API from one origin; the existing Pages deployment also remains available as an alternative frontend.
 
 1. Set the backend environment variables shown in `.env.example`: `API_TOKEN`, `DAYTONA_API_KEY`, `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD`, and optionally `NEO4J_DATABASE`.
 2. Set `ALLOWED_ORIGIN` to the exact frontend origin, e.g. `https://aryanjhanambi.github.io`. Multiple origins can be comma-separated.
@@ -98,11 +150,11 @@ Routes (all require `Authorization: Bearer <API_TOKEN>`):
 
 Neo4j report-memory model: `(Company)-[:HAS_REPORT]->(Report)-[:CONTAINS]->(Evidence)-[:ABOUT]->(Topic)`. Evidence carries the exact extracted text and category, and each report retains its source URL and period. Parameterized queries prevent report content from becoming Cypher. Automated customer/supplier entity resolution and hosted thesis synchronization remain future extensions. The separate shock lab adds a curated company-exposure graph and an optional Nosana evidence-explanation adapter as described above.
 
-Live service integration needs working credentials and a separately deployed backend. It has not been exercised against live Daytona or Neo4j in the credential-free demo. API tests inject fake services to verify authentication, validation, and routing; they do not prove external service availability.
+Live service integration needs working credentials and the running backend. The research workflow has been tested against local Neo4j; external-provider calls remain unverified until keys arrive. Mocked contract tests do not prove provider availability.
 
 ## Deploy the API on Railway
 
-The repository includes `Dockerfile`, `.dockerignore`, and `railway.json`. This deploys the backend API; the existing GitHub Pages dashboard remains the frontend.
+The repository includes a multi-stage `Dockerfile`, `.dockerignore`, and `railway.json`. Railway serves both the built dashboard and API. GitHub Pages remains an alternative static frontend. Check the service's UI healthcheck/start settings too: Railway's legacy Config-as-Code support varies by service age.
 
 1. In [Railway](https://railway.com/dashboard), create a project from the GitHub repository `aryanjhanambi/thesis-company-memory`, using branch `main` and the repository root. Railway uses the Dockerfile and configuration automatically.
 2. Add `API_TOKEN` as a long random secret and `ALLOWED_ORIGIN=https://aryanjhanambi.github.io` in the service Variables tab. These two variables are enough for authenticated live report discovery; discovery does not need Daytona or Neo4j.

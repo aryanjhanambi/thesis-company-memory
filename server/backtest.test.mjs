@@ -90,7 +90,7 @@ test('unconfigured integrations fail explicitly and validate before compute', as
   await assert.rejects(service.graph('MSFT', 'bad'), /ISO/);
   await assert.rejects(service.backtest(input), /Daytona is not configured/);
   await assert.rejects(service.backtest({}), /price rows/);
-  await assert.rejects(service.explain({ root: 'MSFT', asOf: '2024-03-19' }), /Nosana-hosted/);
+  await assert.rejects(service.explain({ root: 'MSFT', asOf: '2024-03-19' }), /NOSANA_API_KEY/);
 });
 test('Daytona adapter uploads only fixed code and JSON, blocks networking, and cleans up', async () => {
   const uploads = [];
@@ -197,5 +197,8 @@ test('Nosana inference receives only eligible evidence and never treats failure 
     driver: null,
     fetcher: async () => ({ ok: false }),
   });
-  await assert.rejects(failing.explain({ root: 'MSFT', asOf: '2024-03-19' }), /inference failed/);
+  await assert.rejects(
+    failing.explain({ root: 'MSFT', asOf: '2024-03-19' }),
+    /provider request failed/,
+  );
 });

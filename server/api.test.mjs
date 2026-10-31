@@ -1,9 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from './app.mjs';
+import { fileURLToPath } from 'node:url';
 test('API authenticates, validates, and returns a persisted integration result', async (t) => {
   let received;
   const services = {
+    agent: {
+      status: async () => ({ ready: false, missing: ['EXA_API_KEY'] }),
+      launch: async () => ({ id: 'test-agent-run', status: 'running' }),
+      configure: async (input) => input,
+      review: async (id, input) => ({ id, ...input }),
+      check: async () => ({ exa: true, nosana: true, neo4j: true }),
+      history: async (id) => [{ logicalId: id }],
+    },
     shock: {
       seed: async () => ({ relationships: 5 }),
       graph: async (root, asOf) => ({ root, asOf, paths: [] }),
@@ -38,6 +47,48 @@ test('API authenticates, validates, and returns a persisted integration result',
     Origin: 'https://example.github.io',
   };
   const health = await fetch(base + '/api/health', { headers });
+  assert.equal(
+    (await (await fetch(base + '/api/agent/status', { headers })).json()).missing[0],
+    'EXA_API_KEY',
+  );
+  assert.equal(
+    (await fetch(base + '/api/agent/scan', { method: 'POST', headers, body: '{}' })).status,
+    202,
+  );
+  assert.equal(
+    (
+      await (
+        await fetch(base + '/api/agent/config', {
+          method: 'POST',
+          headers,
+          body: '{"enabled":false}',
+        })
+      ).json()
+    ).enabled,
+    false,
+  );
+  assert.equal(
+    (await (await fetch(base + '/api/agent/check', { method: 'POST', headers, body: '{}' })).json())
+      .exa,
+    true,
+  );
+  assert.equal(
+    (
+      await (
+        await fetch(base + '/api/agent/proposals/test/review', {
+          method: 'POST',
+          headers,
+          body: '{"decision":"reject"}',
+        })
+      ).json()
+    ).decision,
+    'reject',
+  );
+  assert.equal(
+    (await (await fetch(base + '/api/agent/history?id=azure', { headers })).json()).versions[0]
+      .logicalId,
+    'azure',
+  );
   assert.equal(
     (await fetch(base + '/api/shocks/seed', { method: 'POST', headers, body: '{}' })).status,
     200,
@@ -102,6 +153,35 @@ test('API authenticates, validates, and returns a persisted integration result',
     (await (await fetch(base + '/api/companies/nvda/memory', { headers })).json()).reports.length,
     1,
   );
+});
+test('Railway serves static UI publicly while API and cross-origin access remain protected', async (t) => {
+  const server = createApp(
+    { health: async () => ({ neo4j: false }) },
+    { API_TOKEN: 'local-test' },
+    fileURLToPath(new URL('./fixtures/static', import.meta.url)),
+  ).listen(0, '127.0.0.1');
+  await new Promise((resolve) => server.once('listening', resolve));
+  t.after(() => new Promise((resolve) => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  assert.match(await (await fetch(base)).text(), /Public test dashboard/);
+  assert.equal((await fetch(base + '/api/health')).status, 401);
+  assert.equal(
+    (
+      await fetch(base + '/api/health', {
+        headers: { Authorization: 'Bearer local-test', Origin: base },
+      })
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await fetch(base + '/api/health', {
+        headers: { Authorization: 'Bearer local-test', Origin: 'https://untrusted.example' },
+      })
+    ).status,
+    403,
+  );
+  assert.equal((await fetch(base + '/server/services.mjs')).status, 404);
 });
 test('backend refuses to run unprotected without API_TOKEN', async (t) => {
   const server = createApp({}, {}).listen(0, '127.0.0.1');

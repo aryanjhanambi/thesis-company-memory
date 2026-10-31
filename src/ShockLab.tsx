@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -9,12 +9,14 @@ import {
   FlaskConical,
   GitBranch,
   Network,
+  Radio,
   Play,
   Settings2,
   Upload,
   X,
 } from 'lucide-react';
 import CompanyMemory from './App';
+import { ResearchWatchtower } from './components/research-watchtower';
 import {
   companies,
   relationships,
@@ -81,6 +83,8 @@ export default function ShockLab() {
   const [asOf, setAsOf] = useState('2024-03-19');
   const [selected, setSelected] = useState('foundry');
   const [maxHops, setMaxHops] = useState(2);
+  const [liveMode, setLiveMode] = useState(false);
+  const [graphLoading, setGraphLoading] = useState(false);
   const [remoteGraph, setRemoteGraph] = useState<{
     root: string;
     asOf: string;
@@ -90,7 +94,7 @@ export default function ShockLab() {
     remoteGraph?.root === shock.subject && remoteGraph?.asOf === asOf ? remoteGraph.edges : null;
   const setRemoteEdges = (value: Relationship[] | null) =>
     setRemoteGraph(value ? { root: shock.subject, asOf, edges: value } : null);
-  const edges = remoteEdges ?? relationships;
+  const edges = liveMode ? (remoteEdges ?? []) : relationships;
   const paths = useMemo(
     () => exposurePaths(shock.subject, asOf, maxHops, edges),
     [shock.subject, asOf, maxHops, edges],
@@ -118,7 +122,12 @@ export default function ShockLab() {
     dataset: string;
   } | null>(null);
   const [settings, setSettings] = useState(false);
-  const [api, setApi] = useState(() => stored('thesis:api:v1', import.meta.env.VITE_API_URL || ''));
+  const [api, setApi] = useState(
+    () =>
+      stored('thesis:api:v1', '') ||
+      import.meta.env.VITE_API_URL ||
+      (location.hostname.endsWith('github.io') ? '' : location.origin),
+  );
   const [token, setToken] = useState('');
   const [busy, setBusy] = useState('');
   const [notice, setNotice] = useState('');
@@ -126,6 +135,7 @@ export default function ShockLab() {
     neo4j: boolean;
     daytona: boolean;
     nosana: boolean;
+    exa: boolean;
   } | null>(null);
   const [explanation, setExplanation] = useState<{
     text: string;
@@ -175,10 +185,32 @@ export default function ShockLab() {
     setRemoteEdges(null);
     setExplanation(null);
   }
+  useEffect(() => {
+    if (!liveMode || !api || !token) return;
+    let cancelled = false;
+    setRemoteGraph(null);
+    setGraphLoading(true);
+    request(`/api/shocks/graph?root=${shock.subject}&asOf=${asOf}`)
+      .then((result) => {
+        if (!cancelled) setRemoteGraph({ root: shock.subject, asOf, edges: result.relationships });
+      })
+      .catch((error) => {
+        if (!cancelled)
+          setNotice(error instanceof Error ? error.message : 'Live graph could not be loaded.');
+      })
+      .finally(() => {
+        if (!cancelled) setGraphLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [liveMode, asOf, shock.subject, api, token]);
   async function execute() {
     await action('Running backtest', async () => {
       if (!hypothesis.trim()) throw new Error('Write a hypothesis before running a test.');
-      const available = exposurePaths(shock.subject, asOf, 2);
+      if (liveMode && (graphLoading || !remoteEdges))
+        throw new Error('Load the live graph at this cutoff before testing its basket.');
+      const available = exposurePaths(shock.subject, asOf, 2, edges);
       if (tickers.some((t) => !available.some((p) => p.company === t)))
         throw new Error(
           'Every basket company must be reachable in the evidence graph at the cutoff.',
@@ -193,6 +225,8 @@ export default function ShockLab() {
         costBps,
         direction,
         root: shock.subject,
+        graphMode: liveMode ? 'live' : 'curated',
+        evidenceVersionIds: edges.map((e) => e.versionId || e.id),
       };
       const result =
         executor === 'daytona'
@@ -241,7 +275,9 @@ export default function ShockLab() {
     if (
       !validDate(asOf) ||
       asOf > new Date().toISOString().slice(0, 10) ||
-      tickers.some((t) => !exposurePaths(shock.subject, asOf, 2).some((p) => p.company === t))
+      tickers.some(
+        (t) => !exposurePaths(shock.subject, asOf, 2, edges).some((p) => p.company === t),
+      )
     ) {
       setNotice('Choose a valid past evidence cutoff with a reachable basket before freezing.');
       return;
@@ -292,7 +328,7 @@ export default function ShockLab() {
         </a>
         <div className="sl-nav-label">RESEARCH DESK</div>
         <nav aria-label="Research workspace">
-          {['Investigate', 'Backtest', 'Paper journal'].map((name, i) => (
+          {['Investigate', 'Backtest', 'Paper journal', 'Watchtower'].map((name, i) => (
             <button
               key={name}
               className={tab === name ? 'active' : ''}
@@ -302,8 +338,10 @@ export default function ShockLab() {
                 <Network size={17} />
               ) : i === 1 ? (
                 <FlaskConical size={17} />
-              ) : (
+              ) : i === 2 ? (
                 <GitBranch size={17} />
+              ) : (
+                <Radio size={17} />
               )}
               {name}
               <span>0{i + 1}</span>
@@ -322,7 +360,7 @@ export default function ShockLab() {
           <Settings2 size={16} /> Connections
         </button>
         <small>
-          Neo4j · Daytona · Nosana
+          Exa · Neo4j · Daytona · Nosana
           <br />
           {health ? 'Connection status checked this session' : 'Demo works without credentials'}
         </small>
@@ -356,9 +394,9 @@ export default function ShockLab() {
                 </>
               ) : (
                 <>
-                  Write it down.
+                  {tab === 'Watchtower' ? 'Keep watch.' : 'Write it down.'}
                   <br />
-                  <em>Then watch it unfold.</em>
+                  <em>{tab === 'Watchtower' ? 'Keep the receipts.' : 'Then watch it unfold.'}</em>
                 </>
               )}
             </h1>
@@ -368,7 +406,9 @@ export default function ShockLab() {
               ? 'Look past the ticker. Trace the business relationships behind a market move, inspect the evidence, and test your own explanation.'
               : tab === 'Backtest'
                 ? 'Define the basket before seeing the result. Test against a benchmark, include costs, and keep the losing runs.'
-                : 'Freeze a thesis before new prices arrive. Update it with later observations—not a conveniently chosen past.'}
+                : tab === 'Watchtower'
+                  ? 'A research worker that follows new evidence, proposes graph changes, and records what it found—and when it found it.'
+                  : 'Freeze a thesis before new prices arrive. Update it with later observations—not a conveniently chosen past.'}
           </p>
         </section>
         {notice && (
@@ -463,8 +503,12 @@ export default function ShockLab() {
                   <div>
                     <h2>The exposure map</h2>
                     <span>
-                      {remoteEdges ? 'NEO4J QUERY' : 'CURATED LOCAL GRAPH'} / {visible.length} dated
-                      relationships
+                      {liveMode
+                        ? graphLoading
+                          ? 'NEO4J / LOADING'
+                          : 'NEO4J / KNOWN AT CUTOFF'
+                        : 'CURATED LOCAL GRAPH'}{' '}
+                      / {visible.length} dated relationships
                     </span>
                   </div>
                   <button
@@ -475,11 +519,22 @@ export default function ShockLab() {
                           `/api/shocks/graph?root=${shock.subject}&asOf=${asOf}`,
                         );
                         setRemoteEdges(result.relationships);
+                        setLiveMode(true);
                       })
                     }
                   >
                     Query Neo4j <ArrowUpRight size={14} />
                   </button>
+                  {liveMode && (
+                    <button
+                      onClick={() => {
+                        setLiveMode(false);
+                        setRemoteGraph(null);
+                      }}
+                    >
+                      Use curated example
+                    </button>
+                  )}
                 </div>
                 <div className="sl-graph-wrap">
                   <svg
@@ -501,6 +556,7 @@ export default function ShockLab() {
                           <path
                             d={`M${a.x},${a.y} C${(a.x + b.x) / 2},${a.y} ${(a.x + b.x) / 2},${b.y} ${b.x},${b.y}`}
                             className={e.id === evidence?.id ? 'sl-edge selected' : 'sl-edge'}
+                            strokeDasharray={e.kind === 'disputed' ? '6 5' : undefined}
                           />
                           <text
                             x={(a.x + b.x) / 2}
@@ -553,8 +609,11 @@ export default function ShockLab() {
                     ))}
                   {visible.length === 0 && (
                     <p>
-                      No relationships in this curated set were published by the cutoff. Move the
-                      date to March 18, 2024 or later.
+                      {liveMode
+                        ? graphLoading
+                          ? 'Loading approved evidence at this cutoff…'
+                          : 'No approved relationship was known to this system at the selected cutoff.'
+                        : 'No relationships in this curated set were published by the cutoff. Move the date to March 18, 2024 or later.'}
                     </p>
                   )}
                 </div>
@@ -582,7 +641,11 @@ export default function ShockLab() {
                       </select>
                     </label>
                     <div className="sl-evidence-type">
-                      {evidence?.kind === 'reported' ? 'REPORTED FACT' : 'ANNOUNCED PLAN'}
+                      {evidence?.kind === 'reported'
+                        ? 'REPORTED FACT'
+                        : evidence?.kind === 'disputed'
+                          ? 'DISPUTED EVIDENCE'
+                          : 'ANNOUNCED PLAN'}
                     </div>
                     <h3>
                       {evidence?.from} → {evidence?.to}
@@ -593,6 +656,18 @@ export default function ShockLab() {
                         <dt>Published</dt>
                         <dd>{evidence?.published}</dd>
                       </div>
+                      {evidence?.discoveredAt && (
+                        <div>
+                          <dt>Discovered</dt>
+                          <dd>{evidence.discoveredAt.slice(0, 10)}</dd>
+                        </div>
+                      )}
+                      {evidence?.reviewedAt && (
+                        <div>
+                          <dt>Approved</dt>
+                          <dd>{evidence.reviewedAt.slice(0, 10)}</dd>
+                        </div>
+                      )}
                       <div>
                         <dt>Evidence ID</dt>
                         <dd>{evidence?.id}</dd>
@@ -621,7 +696,15 @@ export default function ShockLab() {
                   <span>THE RESEARCH TRAIL</span>
                   <span>As of {asOf}</span>
                 </div>
-                {developments
+                {(liveMode
+                  ? edges.map((e) => ({
+                      date: e.reviewedAt?.slice(0, 10) || e.published,
+                      title: `${e.from} → ${e.to} / ${e.label}`,
+                      detail: e.note,
+                      source: e.source,
+                    }))
+                  : developments
+                )
                   .filter((d) => d.date <= asOf)
                   .map((d) => (
                     <a
@@ -640,9 +723,9 @@ export default function ShockLab() {
                     </a>
                   ))}
                 <p className="sl-footnote">
-                  Date-filtered reconstruction from current source pages, not an archived,
-                  historically complete feed. Relationship direction is economic context—not a
-                  proven causal model.
+                  {liveMode
+                    ? 'Live replay requires publication, discovery and approval by the cutoff. Version history is available in Watchtower. This does not establish causation or financial materiality.'
+                    : 'Date-filtered reconstruction from current source pages, not an archived, historically complete feed. Relationship direction is economic context—not a proven causal model.'}
                 </p>
               </section>
               <section className="sl-hypothesis">
@@ -681,6 +764,22 @@ export default function ShockLab() {
               </section>
             </div>
           </>
+        )}
+        {tab === 'Watchtower' && (
+          <ResearchWatchtower
+            request={request}
+            connected={Boolean(api && token)}
+            connectionId={api}
+            onConnect={() => setSettings(true)}
+            onUseGraph={async () => {
+              const today = new Date().toISOString().slice(0, 10);
+              const result = await request(`/api/shocks/graph?root=${shock.subject}&asOf=${today}`);
+              setAsOf(today);
+              setRemoteGraph({ root: shock.subject, asOf: today, edges: result.relationships });
+              setLiveMode(true);
+              setTab('Investigate');
+            }}
+          />
         )}
         {tab === 'Backtest' && (
           <div className="sl-test-grid">
@@ -1079,6 +1178,7 @@ export default function ShockLab() {
               {[
                 ['Neo4j', health?.neo4j, 'Dated company relationships; query up to two hops.'],
                 ['Daytona', health?.daytona, 'Fixed-code backtests in network-blocked sandboxes.'],
+                ['Exa', health?.exa, 'Official-source search for the research worker.'],
                 [
                   'Nosana',
                   health?.nosana,

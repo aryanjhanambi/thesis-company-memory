@@ -572,6 +572,8 @@
 .sl-evidence dd {
   margin: 0;
   text-align: right;
+  overflow-wrap: anywhere;
+  max-width: 145px;
 }
 .sl-evidence > a {
   font-size: 10px;
@@ -1210,6 +1212,7 @@
   }
   .sl nav {
     display: flex;
+    flex-wrap: wrap;
     order: 2;
     width: 100%;
     gap: 12px;

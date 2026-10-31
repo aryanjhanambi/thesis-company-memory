@@ -5,6 +5,9 @@ import neo4j from 'neo4j-driver';
 import { extractClaims } from '../src/lib/analysis.mjs';
 import { discoverReports } from './discovery.mjs';
 import { createShockServices } from './shock-services.mjs';
+import { createAgentStore } from './agent-store.mjs';
+import { createResearchAgent } from './research-agent.mjs';
+import { createInferenceClient } from './provider-client.mjs';
 
 export function validateReportUrl(raw, allowedHosts) {
   let url;
@@ -44,8 +47,13 @@ export function createServices(env = process.env) {
   const query = (text, params) =>
     driver.executeQuery(text, params, { database: env.NEO4J_DATABASE || 'neo4j' });
   let busy = false;
+  const researchStore = createAgentStore(driver, env);
+  const inference = createInferenceClient(env);
+  const agent = createResearchAgent({ env, store: researchStore, inference });
   return {
-    shock: createShockServices({ env, driver }),
+    shock: createShockServices({ env, driver, researchStore, inference }),
+    agent,
+    start: () => agent.start(),
     allowedHosts,
     discover: (ticker) => discoverReports(ticker),
     async health() {
@@ -63,7 +71,8 @@ export function createServices(env = process.env) {
         daytona: Boolean(env.DAYTONA_API_KEY),
         extraction: 'deterministic',
         model: false,
-        nosana: Boolean(env.NOSANA_INFERENCE_URL && env.NOSANA_MODEL),
+        nosana: inference.configured,
+        exa: Boolean(env.EXA_API_KEY),
       };
     },
     async ingest(input) {
@@ -174,6 +183,7 @@ export function createServices(env = process.env) {
       }));
     },
     async close() {
+      await agent.stop();
       if (driver) await driver.close();
     },
   };

@@ -1,23 +1,46 @@
 import express from 'express';
 import { timingSafeEqual } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 
 const equal = (a, b) => {
   const left = Buffer.from(a),
     right = Buffer.from(b);
   return left.length === right.length && timingSafeEqual(left, right);
 };
-export function createApp(services, env = process.env) {
+export function createApp(
+  services,
+  env = process.env,
+  staticDirectory = fileURLToPath(new URL('../dist', import.meta.url)),
+) {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', 1);
+  app.use((_req, res, next) => {
+    res
+      .set('X-Content-Type-Options', 'nosniff')
+      .set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
   // Railway probes process liveness without credentials. Configuration and
   // third-party connectivity remain behind the authenticated /api/health route.
   app.get('/healthz', (_req, res) => res.set('Cache-Control', 'no-store').json({ status: 'ok' }));
+  // Public static UI, private API. Railway can serve both from one origin.
+  if (existsSync(staticDirectory))
+    app.use(
+      express.static(staticDirectory, {
+        dotfiles: 'deny',
+        index: 'index.html',
+        setHeaders: (res) => res.set('Cache-Control', 'no-cache'),
+      }),
+    );
   const origins = (env.ALLOWED_ORIGIN || 'http://127.0.0.1:5173').split(',').map((s) => s.trim());
-  app.use((req, res, next) => {
+  app.use('/api', (req, res, next) => {
     const origin = req.get('Origin');
     res.set('X-Content-Type-Options', 'nosniff');
     res.set('Cache-Control', 'no-store');
-    if (origin && !origins.includes(origin))
+    const sameOrigin = origin === `${req.protocol}://${req.get('host')}`;
+    if (origin && !sameOrigin && !origins.includes(origin))
       return res.status(403).json({ error: 'Origin is not allowed.' });
     if (origin) res.set('Access-Control-Allow-Origin', origin).set('Vary', 'Origin');
     res
@@ -31,6 +54,50 @@ export function createApp(services, env = process.env) {
     next();
   });
   app.use(express.json({ limit: '1mb' }));
+  app.get('/api/agent/status', async (_req, res, next) => {
+    try {
+      res.json(await services.agent.status());
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/agent/scan', async (_req, res, next) => {
+    try {
+      res.status(202).json(await services.agent.launch());
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/agent/check', async (_req, res, next) => {
+    try {
+      res.json(await services.agent.check());
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/agent/config', async (req, res, next) => {
+    try {
+      res.json(await services.agent.configure(req.body));
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/agent/proposals/:id/review', async (req, res, next) => {
+    try {
+      res.json(await services.agent.review(req.params.id, req.body));
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.get('/api/agent/history', async (req, res, next) => {
+    try {
+      if (typeof req.query.id !== 'string' || req.query.id.length > 150)
+        return res.status(400).json({ error: 'Provide a relationship ID.' });
+      res.json({ versions: await services.agent.history(req.query.id) });
+    } catch (error) {
+      next(error);
+    }
+  });
   app.get('/api/shocks/graph', async (req, res, next) => {
     try {
       res.json(await services.shock.graph(req.query.root, req.query.asOf));
@@ -109,9 +176,7 @@ export function createApp(services, env = process.env) {
     if (status >= 500) console.error('Request failed:', error.name);
     res.status(status).json({
       error:
-        status === 500
-          ? 'Report processing failed. Check backend configuration and logs.'
-          : error.message,
+        status === 500 ? 'Request failed. Check backend configuration and logs.' : error.message,
     });
   });
   return app;

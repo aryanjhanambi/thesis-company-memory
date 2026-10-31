@@ -9,6 +9,8 @@ export type TestInput = {
   costBps: number;
   direction: string;
   root?: string;
+  graphMode?: string;
+  evidenceVersionIds?: string[];
 };
 export type TestResult = {
   curve: { date: string; equity: number; benchmark: number }[];

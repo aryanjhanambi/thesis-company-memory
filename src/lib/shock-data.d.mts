@@ -7,6 +7,9 @@ export type Relationship = {
   kind: string;
   note: string;
   source: string;
+  versionId?: string;
+  discoveredAt?: string;
+  reviewedAt?: string;
 };
 export const companies: { id: string; name: string; role: string; x: number; y: number }[];
 export const relationships: Relationship[];
