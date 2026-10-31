@@ -22,6 +22,9 @@ test('API authenticates, validates, and returns a persisted integration result',
   await new Promise((resolve) => server.once('listening', resolve));
   t.after(() => new Promise((resolve) => server.close(resolve)));
   const base = `http://127.0.0.1:${server.address().port}`;
+  const liveness = await fetch(base + '/healthz');
+  assert.equal(liveness.status, 200);
+  assert.deepEqual(await liveness.json(), { status: 'ok' });
   assert.equal((await fetch(base + '/api/health')).status, 401);
   const headers = {
     Authorization: 'Bearer test-token',

@@ -57,16 +57,31 @@ GitHub Pages serves static files. It cannot hold secrets or run this API. The in
 
 Routes (all require `Authorization: Bearer <API_TOKEN>`):
 
-| Route                           | Purpose                                                                                                      |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `GET /api/health`               | Checks Neo4j connectivity and Daytona configuration                                                          |
-| `GET /api/reports/discover?ticker=NVDA` | Finds official filings or company report links without requiring Daytona or Neo4j |
-| `POST /api/reports`             | Accepts `companyId`, `companyName`, `title`, `period`, `url`; executes Daytona extraction and saves to Neo4j |
-| `GET /api/companies/:id/memory` | Reads reports and associated evidence from Neo4j                                                             |
+| Route                                   | Purpose                                                                                                      |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `GET /api/health`                       | Checks Neo4j connectivity and Daytona configuration                                                          |
+| `GET /api/reports/discover?ticker=NVDA` | Finds official filings or company report links without requiring Daytona or Neo4j                            |
+| `POST /api/reports`                     | Accepts `companyId`, `companyName`, `title`, `period`, `url`; executes Daytona extraction and saves to Neo4j |
+| `GET /api/companies/:id/memory`         | Reads reports and associated evidence from Neo4j                                                             |
 
 Neo4j model: `(Company)-[:HAS_REPORT]->(Report)-[:CONTAINS]->(Evidence)-[:ABOUT]->(Topic)`. Evidence carries the exact extracted text and category, and each report retains its source URL and period. Parameterized queries prevent report content from becoming Cypher. The initial backend supports document/evidence/topic memory; automated customer/supplier entity resolution, hosted thesis synchronization, and an LLM reasoning service are future extensions. Nosana is optional and is not integrated in this version.
 
 Live service integration needs working credentials and a separately deployed backend. It has not been exercised against live Daytona or Neo4j in the credential-free demo. API tests inject fake services to verify authentication, validation, and routing; they do not prove external service availability.
+
+## Deploy the API on Railway
+
+The repository includes `Dockerfile`, `.dockerignore`, and `railway.json`. This deploys the backend API; the existing GitHub Pages dashboard remains the frontend.
+
+1. In [Railway](https://railway.com/dashboard), create a project from the GitHub repository `aryanjhanambi/thesis-company-memory`, using branch `main` and the repository root. Railway uses the Dockerfile and configuration automatically.
+2. Add `API_TOKEN` as a long random secret and `ALLOWED_ORIGIN=https://aryanjhanambi.github.io` in the service Variables tab. These two variables are enough for authenticated live report discovery; discovery does not need Daytona or Neo4j.
+3. For report extraction and persistent company memory, also add `DAYTONA_API_KEY`, `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD`, and optionally `NEO4J_DATABASE`. Keep all service keys in Railway variables, never in GitHub Pages frontend variables.
+4. Deploy and generate a Railway public domain under service Settings → Networking. The process listens on `0.0.0.0` and the injected `PORT`.
+5. Verify `https://YOUR-SERVICE.up.railway.app/healthz` returns `{"status":"ok"}`. This public endpoint is process liveness only; authenticated `/api/health` separately checks Neo4j and reports Daytona configuration.
+6. On the dashboard, open **Connections & settings**, enter the Railway service URL and your `API_TOKEN`, then test the connection. **Find reports** will now perform live discovery through Railway. URL imports become available when Daytona and Neo4j are configured.
+
+Optionally set GitHub repository Actions variable `VITE_API_URL` to the Railway URL and redeploy Pages to preconfigure the endpoint. Never put `API_TOKEN`, Daytona keys, or Neo4j credentials in a `VITE_` variable; those variables are public browser code. Each browser session supplies its access token through the settings dialog.
+
+`railway.json` configures one replica, an unauthenticated `/healthz` deployment probe, and a bounded restart policy. Live service credentials and authenticated Railway access are required to complete deployment; the repository configuration alone does not create a running Railway service.
 
 ## Publish on GitHub Pages
 

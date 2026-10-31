@@ -9,6 +9,9 @@ const equal = (a, b) => {
 export function createApp(services, env = process.env) {
   const app = express();
   app.disable('x-powered-by');
+  // Railway probes process liveness without credentials. Configuration and
+  // third-party connectivity remain behind the authenticated /api/health route.
+  app.get('/healthz', (_req, res) => res.set('Cache-Control', 'no-store').json({ status: 'ok' }));
   const origins = (env.ALLOWED_ORIGIN || 'http://127.0.0.1:5173').split(',').map((s) => s.trim());
   app.use((req, res, next) => {
     const origin = req.get('Origin');
