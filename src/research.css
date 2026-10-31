@@ -1,4 +1,164 @@
 /* Research ledger: paper, ink, rules, and data rather than a grid of cards. */
+.finder-search {
+  margin: 22px 0 13px;
+}
+.finder-search > label {
+  margin: 0 0 6px;
+}
+.finder-search > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.modal .finder-search input {
+  margin: 0;
+  max-width: 180px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.finder-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 11px;
+  margin: 0 0 20px;
+  color: #7c856f;
+}
+.finder-shortcuts button {
+  padding: 2px 0;
+  border-bottom: 1px solid #b4c2a5;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #526b43;
+}
+.finder-loading {
+  padding: 25px 0;
+  color: #7c8e69;
+  font-size: 12px;
+}
+.finder-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-top: 1px solid #b0be9e;
+  padding-top: 20px;
+}
+.finder-summary h3 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 22px;
+  color: #3f5b33;
+}
+.finder-summary > span {
+  color: #849672;
+  font-size: 11px;
+}
+.finder-checked {
+  color: #8a9d75;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  margin: 8px 0 18px;
+}
+.finder-note {
+  color: #8a9b76;
+  font-size: 11px;
+  margin-bottom: 13px;
+}
+.finder-results {
+  max-height: 410px;
+  overflow: auto;
+  padding-right: 4px;
+}
+.finder-results article {
+  padding: 19px 0;
+  border-top: 1px solid #d2dbc6;
+}
+.finder-report-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #8d9d7b;
+  font-size: 10px;
+}
+.finder-results h4 {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 400;
+  color: #4c693f;
+  margin: 9px 0 7px;
+}
+.finder-results article > p {
+  color: #91a37f;
+  font-size: 10px;
+}
+.finder-report-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 15px;
+}
+.finder-report-actions > a,
+.finder-report-actions > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px solid #becdab;
+  color: #65884f;
+}
+.finder-report-actions > a:hover,
+.finder-report-actions > button:hover {
+  color: #385b2b;
+}
+.finder-footnote {
+  border-top: 1px solid #becbad;
+  padding-top: 17px;
+  margin-top: 22px;
+}
+.finder-footnote > p {
+  color: #8c9e79;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.finder-footnote > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #65884f;
+  font-size: 11px;
+  margin-top: 10px;
+}
+@media (max-width: 700px) {
+  .page-heading {
+    flex-wrap: wrap;
+  }
+  .heading-actions {
+    width: 100%;
+  }
+  .heading-actions .button:first-child {
+    display: inline-flex;
+  }
+  .heading-actions .button {
+    font-size: 10px;
+  }
+  .finder-search > div {
+    align-items: stretch;
+  }
+  .modal .finder-search input {
+    min-width: 0;
+    max-width: 145px;
+  }
+  .finder-search .button {
+    font-size: 10px;
+  }
+  .finder-report-actions {
+    gap: 10px;
+  }
+}
 :root {
   --paper: #f4f1ea;
   --ink: #252820;

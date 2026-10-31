@@ -37,6 +37,7 @@ import {
   X,
 } from 'lucide-react';
 import { EvidenceMemory } from '@/components/evidence-memory';
+import { ReportFinder } from '@/components/report-finder';
 import { CompanyTimeline } from '@/components/company-timeline';
 import { AnalyticsBento } from '@/components/ui/analytics-bento';
 import {
@@ -467,7 +468,7 @@ export default function App() {
   const [evidence, setEvidence] = useState<Change | null>(null);
   const [reportView, setReportView] = useState<Report | null>(null);
   const [modal, setModal] = useState<
-    'report' | 'thesis' | 'company' | 'settings' | 'search' | 'help' | null
+    'report' | 'discover' | 'thesis' | 'company' | 'settings' | 'search' | 'help' | null
   >(null);
   const [editing, setEditing] = useState<ThesisItem | null>(null);
   const [toast, setToast] = useState('');
@@ -963,8 +964,12 @@ export default function App() {
                 <Download size={14} />
                 Export
               </button>
+              <button className="button primary" onClick={() => setModal('discover')}>
+                <Search size={14} />
+                Find reports
+              </button>
               <button
-                className="button primary"
+                className="button"
                 onClick={() => {
                   setError('');
                   setModal('report');
@@ -1525,9 +1530,9 @@ export default function App() {
                       <h2>Source documents</h2>
                       <p>Original reports and extracted evidence form your company memory.</p>
                     </div>
-                    <button className="button" onClick={() => setModal('report')}>
-                      <Upload size={15} />
-                      Import report
+                    <button className="button" onClick={() => setModal('discover')}>
+                      <Search size={15} />
+                      Find online
                     </button>
                   </div>
                   <div className="reports-table">
@@ -1920,11 +1925,43 @@ export default function App() {
           </div>
         </Modal>
       )}
+      {modal === 'discover' && (
+        <Modal wide title="Find company reports" onClose={close}>
+          <ReportFinder
+            ticker={company.ticker}
+            apiUrl={apiUrl}
+            token={token}
+            onUse={(report, companyName) => {
+              let target = companies.find((c) => c.ticker === report.ticker);
+              if (!target) {
+                target = {
+                  id: crypto.randomUUID(),
+                  name: companyName,
+                  ticker: report.ticker,
+                  description: 'Your research workspace',
+                };
+                setCompanies([...companies, target]);
+              }
+              if (target.id !== companyId) switchCompany(target.id);
+              setImportTitle(report.title.slice(0, 150));
+              setImportPeriod(report.period === 'Period not specified' ? '' : report.period);
+              setImportUrl(report.url);
+              setImportText('');
+              setError('');
+              setModal('report');
+            }}
+          />
+        </Modal>
+      )}
       {modal === 'report' && (
         <Modal title="Import a report" onClose={close}>
           <p className="modal-description">
             Upload a report or paste its text. Each report stays connected to {company.name}.
           </p>
+          <button className="text-link" onClick={() => setModal('discover')}>
+            Find the report online
+            <Search size={13} />
+          </button>
           <form onSubmit={addReport}>
             <label className="upload-zone">
               <Upload size={23} />

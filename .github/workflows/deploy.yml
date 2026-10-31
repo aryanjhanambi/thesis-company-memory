@@ -21,6 +21,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - name: Discover official company reports
+        run: npm run discover:reports
       - run: npm run build
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}

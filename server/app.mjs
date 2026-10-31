@@ -28,6 +28,13 @@ export function createApp(services, env = process.env) {
     next();
   });
   app.use(express.json({ limit: '1mb' }));
+  app.get('/api/reports/discover', async (req, res, next) => {
+    try {
+      res.json(await services.discover(req.query.ticker));
+    } catch (error) {
+      next(error);
+    }
+  });
   app.get('/api/health', async (_req, res, next) => {
     try {
       res.json(await services.health());
@@ -69,14 +76,12 @@ export function createApp(services, env = process.env) {
   app.use((error, _req, res, _next) => {
     const status = error.status || 500;
     if (status >= 500) console.error('Request failed:', error.name);
-    res
-      .status(status)
-      .json({
-        error:
-          status === 500
-            ? 'Report processing failed. Check backend configuration and logs.'
-            : error.message,
-      });
+    res.status(status).json({
+      error:
+        status === 500
+          ? 'Report processing failed. Check backend configuration and logs.'
+          : error.message,
+    });
   });
   return app;
 }

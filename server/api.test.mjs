@@ -4,6 +4,10 @@ import { createApp } from './app.mjs';
 test('API authenticates, validates, and returns a persisted integration result', async (t) => {
   let received;
   const services = {
+    discover: async (ticker) => ({
+      ticker,
+      reports: [{ title: 'Official report', url: 'https://www.sec.gov/report' }],
+    }),
     health: async () => ({ neo4j: true, daytona: true }),
     ingest: async (input) => {
       received = input;
@@ -25,6 +29,9 @@ test('API authenticates, validates, and returns a persisted integration result',
     Origin: 'https://example.github.io',
   };
   const health = await fetch(base + '/api/health', { headers });
+  const discovery = await fetch(base + '/api/reports/discover?ticker=NVDA', { headers });
+  assert.equal(discovery.status, 200);
+  assert.equal((await discovery.json()).ticker, 'NVDA');
   assert.equal(health.headers.get('access-control-allow-origin'), 'https://example.github.io');
   assert.equal((await health.json()).neo4j, true);
   assert.equal(

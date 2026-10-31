@@ -1,0 +1,64 @@
+{
+  "generatedAt": "2026-10-31T07:38:31.362Z",
+  "companies": {
+    "NVDA": {
+      "ticker": "NVDA",
+      "company": "NVIDIA",
+      "checkedAt": "2026-10-31T07:38:30.651Z",
+      "reports": [
+        {
+          "id": "9bc4950664f1773de163",
+          "ticker": "NVDA",
+          "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
+          "period": "Q2 FY2027",
+          "form": "Earnings release",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
+          "source": "Official company website"
+        },
+        {
+          "id": "7b7a02ff0f3f5e4c7b9d",
+          "ticker": "NVDA",
+          "title": "NVIDIA Announces Financial Results for First Quarter Fiscal 2027",
+          "period": "Q1 FY2027",
+          "form": "Earnings release",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+          "source": "Official company website"
+        },
+        {
+          "id": "8ea14aeea84b502bd3d8",
+          "ticker": "NVDA",
+          "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026",
+          "period": "Q4 FY2026",
+          "form": "Earnings release",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+          "source": "Official company website"
+        }
+      ],
+      "sourceUrl": "https://nvidianews.nvidia.com/news?q=financial%20results"
+    },
+    "MSFT": {
+      "ticker": "MSFT",
+      "company": "Microsoft",
+      "checkedAt": "2026-10-31T07:38:31.199Z",
+      "reports": [
+        {
+          "id": "3850526be7f2d04565cc",
+          "ticker": "MSFT",
+          "title": "Microsoft Q1 FY2027 earnings release",
+          "period": "Q1 FY2027",
+          "form": "Earnings release",
+          "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast",
+          "source": "Official company website"
+        }
+      ],
+      "sourceUrl": "https://www.microsoft.com/en-us/investor/default"
+    },
+    "AAPL": {
+      "ticker": "AAPL",
+      "company": "Apple",
+      "reports": [],
+      "sourceUrl": "https://www.apple.com/newsroom/archive/",
+      "refreshError": "No report links were found on the official source page. Open the source directly or try live SEC discovery."
+    }
+  }
+}

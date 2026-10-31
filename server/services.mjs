@@ -3,6 +3,7 @@ import { randomUUID, createHash } from 'node:crypto';
 import { Daytona } from '@daytonaio/sdk';
 import neo4j from 'neo4j-driver';
 import { extractClaims } from '../src/lib/analysis.mjs';
+import { discoverReports } from './discovery.mjs';
 
 export function validateReportUrl(raw, allowedHosts) {
   let url;
@@ -27,7 +28,7 @@ export function validateReportUrl(raw, allowedHosts) {
 export function createServices(env = process.env) {
   const allowedHosts = (
     env.REPORT_HOSTS ||
-    'investor.nvidia.com,nvidianews.nvidia.com,investor.microsoft.com,www.microsoft.com,investor.apple.com,www.apple.com'
+    'investor.nvidia.com,nvidianews.nvidia.com,investor.microsoft.com,www.microsoft.com,investor.apple.com,www.apple.com,www.sec.gov'
   )
     .split(',')
     .map((h) => h.trim())
@@ -44,6 +45,7 @@ export function createServices(env = process.env) {
   let busy = false;
   return {
     allowedHosts,
+    discover: (ticker) => discoverReports(ticker),
     async health() {
       let ready = false;
       if (driver) {

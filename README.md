@@ -33,6 +33,16 @@ Historical report text is a concise, explicitly labeled paraphrase of public sou
 
 Browser data is local to this browser and device. Export a JSON copy to back it up. Clearing browser storage removes the local workspace. A company graph shown for NVIDIA is the curated Q3 FY25 example, not a claim that Neo4j is connected.
 
+## Automatic report discovery
+
+Use **Find reports** beside the company heading (or **Find online** in Reports). The public Pages build includes a dated index generated from official NVIDIA, Microsoft, and Apple reporting pages/feeds. `npm run discover:reports` regenerates `public/report-index.json`; the deployment workflow runs it before each build. Results are real discovered links, with reporting periods only when the source specifies them. A failed refresh preserves prior links with a visible warning and their original check date. Coverage is limited to these configured issuers in the static index; this is not a universal or continuously refreshed web search.
+
+The initial verified index contains NVIDIA and Microsoft reports. Apple is configured as an official feed source, but its current feed did not return matching reports; the finder reports that limitation instead of supplying guessed links. Shortcut buttons list only companies with results.
+
+**Open report** visits the original source. **Prepare import** fills the existing import form with the discovered URL/title/period and selects the right company. Finding a report does not mean its contents have already been extracted. URL extraction still needs the backend; users can also upload the downloaded document.
+
+With a backend connected, searching a ticker calls `GET /api/reports/discover?ticker=NVDA`. This first tries official SEC submissions (including 10-Q, 10-K, 20-F, and 40-F) and falls back to configured issuer websites when SEC access is unavailable. Discovery does not require Neo4j/Daytona credentials, although backend access still requires `API_TOKEN`. SEC does not permit direct cross-origin API requests from the browser. Source access errors and unsupported tickers are shown instead of fabricated results.
+
 ## Live Daytona + Neo4j backend
 
 GitHub Pages serves static files. It cannot hold secrets or run this API. The included Express backend must run on a separate Node/container host.
@@ -50,6 +60,7 @@ Routes (all require `Authorization: Bearer <API_TOKEN>`):
 | Route                           | Purpose                                                                                                      |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `GET /api/health`               | Checks Neo4j connectivity and Daytona configuration                                                          |
+| `GET /api/reports/discover?ticker=NVDA` | Finds official filings or company report links without requiring Daytona or Neo4j |
 | `POST /api/reports`             | Accepts `companyId`, `companyName`, `title`, `period`, `url`; executes Daytona extraction and saves to Neo4j |
 | `GET /api/companies/:id/memory` | Reads reports and associated evidence from Neo4j                                                             |
 
