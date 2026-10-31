@@ -153,11 +153,11 @@ export default function ShockLab() {
       !(url.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(url.hostname))
     )
       throw new Error('Use an HTTPS API URL, or localhost for development.');
-    if (!token) throw new Error('Enter your session API token in Connections.');
+    if (!token.trim()) throw new Error('Enter your session API token in Connections.');
     const response = await fetch(`${api.replace(/\/$/, '')}${path}`, {
       method: body ? 'POST' : 'GET',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.trim()}`,
         ...(body ? { 'Content-Type': 'application/json' } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -1153,7 +1153,7 @@ export default function ShockLab() {
                 autoComplete="off"
                 value={token}
                 onChange={(e) => {
-                  setToken(e.target.value);
+                  setToken(e.target.value.trim());
                   setHealth(null);
                 }}
               />

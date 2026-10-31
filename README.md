@@ -22,6 +22,8 @@ DAYTONA_API_KEY=<Daytona key, needed for sandbox backtests and report extraction
 
 Neo4j is a database connection, not just an API key; an active database is required. `NEO4J_DATABASE` defaults to `neo4j`. The database account needs read/write and schema-constraint permissions. Secrets are never embedded in frontend builds.
 
+The session token is the value of `API_TOKEN`, not a provider key. Paste only the value in Connections. The server and dashboard ignore accidental surrounding whitespace, including newlines copied into Railway; internal characters still must match exactly. Empty or whitespace-only configuration keeps the API closed, and missing or incorrect credentials remain unauthorized.
+
 The Dockerfile now builds and serves **both dashboard and API** on Railway's injected PORT. Generate a public Railway domain with target port 8787 (or the injected PORT if changed). Open that URL and enter API_TOKEN in **Connections**; the API URL defaults to the current origin. Same-origin access needs no CORS variable. If using the existing GitHub Pages frontend instead, set `ALLOWED_ORIGIN=https://aryanjhanambi.github.io` on Railway and enter its API URL in Connections. `VITE_API_URL` may contain a public URL, never keys.
 
 Nosana's managed API at `https://inference.nosana.com/v1` is supported: the standard key is sufficient, and the worker discovers a currently serving model with adequate context. Optionally pin `NOSANA_MODEL`, or override `NOSANA_INFERENCE_URL` and `NOSANA_INFERENCE_KEY` for a private compatible deployment. An exhausted account or unavailable model produces an explicit error, never fake research.

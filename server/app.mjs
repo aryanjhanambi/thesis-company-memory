@@ -14,6 +14,9 @@ export function createApp(
   staticDirectory = fileURLToPath(new URL('../dist', import.meta.url)),
 ) {
   const app = express();
+  // Copying Railway variables can append a newline. Normalize only the edges;
+  // preserve the token's contents and constant-time comparison.
+  const accessToken = (env.API_TOKEN || '').trim();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
   app.use((_req, res, next) => {
@@ -47,9 +50,11 @@ export function createApp(
       .set('Access-Control-Allow-Headers', 'Authorization, Content-Type')
       .set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     if (req.method === 'OPTIONS') return res.sendStatus(204);
-    if (!env.API_TOKEN)
+    if (!accessToken)
       return res.status(503).json({ error: 'Set API_TOKEN before exposing the backend.' });
-    if (!equal(req.get('Authorization') || '', `Bearer ${env.API_TOKEN}`))
+    const authorization = req.get('Authorization') || '';
+    const suppliedToken = authorization.startsWith('Bearer ') ? authorization.slice(7).trim() : '';
+    if (!suppliedToken || !equal(suppliedToken, accessToken))
       return res.status(401).json({ error: 'A valid access token is required.' });
     next();
   });

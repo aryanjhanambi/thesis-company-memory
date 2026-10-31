@@ -189,3 +189,32 @@ test('backend refuses to run unprotected without API_TOKEN', async (t) => {
   t.after(() => new Promise((resolve) => server.close(resolve)));
   assert.equal((await fetch(`http://127.0.0.1:${server.address().port}/api/health`)).status, 503);
 });
+
+test('access tokens ignore surrounding whitespace but never accept missing or incorrect credentials', async (t) => {
+  const server = createApp(
+    { health: async () => ({ authenticated: true }) },
+    { API_TOKEN: ' \n 0123456789abcdef \r\n' },
+  ).listen(0, '127.0.0.1');
+  await new Promise((resolve) => server.once('listening', resolve));
+  t.after(() => new Promise((resolve) => server.close(resolve)));
+  const url = `http://127.0.0.1:${server.address().port}/api/health`;
+  for (const value of ['Bearer 0123456789abcdef', 'Bearer   0123456789abcdef  ']) {
+    const response = await fetch(url, { headers: { Authorization: value } });
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { authenticated: true });
+  }
+  for (const value of ['', 'Bearer ', 'Basic 0123456789abcdef', '0123456789abcdef',
+    'Bearer 0123456789abcdeg', 'Bearer 01234567 89abcdef']) {
+    assert.equal((await fetch(url, { headers: { Authorization: value } })).status, 401);
+  }
+});
+
+test('whitespace-only configured token keeps the backend closed', async (t) => {
+  const server = createApp({}, { API_TOKEN: ' \r\n\t ' }).listen(0, '127.0.0.1');
+  await new Promise((resolve) => server.once('listening', resolve));
+  t.after(() => new Promise((resolve) => server.close(resolve)));
+  const response = await fetch(`http://127.0.0.1:${server.address().port}/api/health`, {
+    headers: { Authorization: 'Bearer anything' },
+  });
+  assert.equal(response.status, 503);
+});

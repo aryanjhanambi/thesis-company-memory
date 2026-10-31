@@ -2276,7 +2276,7 @@ export default function App() {
             <input
               type="password"
               value={token}
-              onChange={(e) => setToken(e.target.value)}
+              onChange={(e) => setToken(e.target.value.trim())}
               placeholder="Backend API_TOKEN · kept in memory only"
             />
           </label>
