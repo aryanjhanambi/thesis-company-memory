@@ -58,8 +58,9 @@ function stored<T>(key: string, initial: T): T {
 function persist(key: string, value: unknown) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
-    /* Session remains functional. */
+    return false;
   }
 }
 function download(name: string, value: unknown) {
@@ -258,9 +259,13 @@ export default function ShockLab() {
     };
     const next = [paper, ...papers].slice(0, 20);
     setPapers(next);
-    persist('thesis:paper:v1', next);
+    const saved = persist('thesis:paper:v1', next);
     setTab('Paper journal');
-    setNotice('Hypothesis frozen locally. No money moved and no order was sent.');
+    setNotice(
+      saved
+        ? 'Hypothesis frozen locally. No money moved and no order was sent.'
+        : 'Frozen for this session only: browser storage is full or unavailable. Export the thesis to keep a copy.',
+    );
   }
   if (memory)
     return (
@@ -844,11 +849,13 @@ export default function ShockLab() {
                 <Results
                   run={run}
                   save={() => {
-                    const next = [run, ...runs].slice(0, 10);
+                    const next = [run, ...runs.filter((r) => r.runAt !== run.runAt)].slice(0, 10);
                     setRuns(next);
-                    persist('thesis:shock-runs:v1', next);
+                    const saved = persist('thesis:shock-runs:v1', next);
                     setNotice(
-                      'Saved this complete run locally, including input prices and assumptions.',
+                      saved
+                        ? 'Saved this complete run locally, including input prices and assumptions.'
+                        : 'Kept for this session only: browser storage is full or unavailable. Export the experiment to keep a copy.',
                     );
                   }}
                 />
