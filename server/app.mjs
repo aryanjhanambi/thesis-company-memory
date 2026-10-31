@@ -31,6 +31,34 @@ export function createApp(services, env = process.env) {
     next();
   });
   app.use(express.json({ limit: '1mb' }));
+  app.get('/api/shocks/graph', async (req, res, next) => {
+    try {
+      res.json(await services.shock.graph(req.query.root, req.query.asOf));
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/shocks/seed', async (_req, res, next) => {
+    try {
+      res.json(await services.shock.seed());
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/shocks/backtest', async (req, res, next) => {
+    try {
+      res.json(await services.shock.backtest(req.body));
+    } catch (error) {
+      next(error);
+    }
+  });
+  app.post('/api/shocks/explain', async (req, res, next) => {
+    try {
+      res.json(await services.shock.explain(req.body || {}));
+    } catch (error) {
+      next(error);
+    }
+  });
   app.get('/api/reports/discover', async (req, res, next) => {
     try {
       res.json(await services.discover(req.query.ticker));

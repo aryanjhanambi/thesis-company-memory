@@ -4,6 +4,7 @@ import { Daytona } from '@daytonaio/sdk';
 import neo4j from 'neo4j-driver';
 import { extractClaims } from '../src/lib/analysis.mjs';
 import { discoverReports } from './discovery.mjs';
+import { createShockServices } from './shock-services.mjs';
 
 export function validateReportUrl(raw, allowedHosts) {
   let url;
@@ -44,6 +45,7 @@ export function createServices(env = process.env) {
     driver.executeQuery(text, params, { database: env.NEO4J_DATABASE || 'neo4j' });
   let busy = false;
   return {
+    shock: createShockServices({ env, driver }),
     allowedHosts,
     discover: (ticker) => discoverReports(ticker),
     async health() {
@@ -61,6 +63,7 @@ export function createServices(env = process.env) {
         daytona: Boolean(env.DAYTONA_API_KEY),
         extraction: 'deterministic',
         model: false,
+        nosana: Boolean(env.NOSANA_INFERENCE_URL && env.NOSANA_MODEL),
       };
     },
     async ingest(input) {

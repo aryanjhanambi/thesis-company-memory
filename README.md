@@ -1,6 +1,38 @@
 # Thesis
 
-An investor's second brain for a company. Keep the company's story, your assumptions, and the evidence behind them together. Each new report adds to that memory.
+A market-shock investigation lab. Trace dated business relationships, inspect their evidence, form a hypothesis and test a basket before risking money. The earlier company-memory dashboard remains available from **Company memory**.
+
+## Shock lab: start here
+
+1. **Investigate:** choose an AI-spending, foundry, or server-demand scenario. These are hypothetical scenarios, not live news. Inspect one- or two-hop connections and their original sources.
+2. **Replay:** use a cutoff date or a timeline stop. Only relationships published by that date appear. The March 18, 2024 Blackwell announcement supplies five curated relationships across six companies. Announced plans are distinguished from reported manufacturing facts; neither implies a quantified financial exposure.
+3. **Backtest:** write a hypothesis, choose a reachable basket, and run the browser engine. The built-in series is explicitly **synthetic**, not real historical prices. Upload your own `date,ticker,close` CSV for a user-data experiment. Include SPY and every basket ticker on at least two aligned dates strictly after the cutoff; use consistently adjusted series. Limit: 700 KB / 10,000 rows. No duplicate observations, future uploaded dates or silently dropped missing days.
+4. Inspect the equity curve, SPY comparison, excess return, maximum drawdown, and every simulated fill. Buy-and-hold has equal initial dollar weights and fractional shares, no rebalancing, first-close entry strictly after cutoff, last-close liquidation, and costs on both sides. Cash earns zero. Taxes, market impact and explicit dividend payments are not modeled; corporate-action treatment depends on the supplied prices.
+5. **Save experiment** preserves the complete inputs and result in this browser; export JSON for a portable record. Both winning and losing runs can be saved. Storage is capped at ten experiments; exporting is recommended. Local browser storage is not a tamper-proof audit trail or an account-synced database.
+6. **Freeze for forward paper tracking** records a hypothesis, basket and timestamp locally, with no editing controls. Later, upload actual prices and use **Mark with uploaded CSV**. Entry is the first observed close after the freeze day (UTC), never a retrospectively chosen entry. At least two later aligned observations are required. Results are hypothetical liquidation marks, not live fills. No automatic market feed, brokerage execution or real money is involved. Twenty frozen hypotheses are retained locally; export to back them up.
+
+### Integration boundaries
+
+- **Neo4j:** Connections → **Load curated graph into Neo4j** idempotently writes `(MarketCompany)-[:EXPOSURE]->(MarketCompany)` with source URL, publication date, relationship ID and evidence note. **Query Neo4j** traverses up to two hops and filters _every_ relationship by cutoff. Without keys, the same small graph runs in-browser and is labelled local. This does not automatically discover or resolve arbitrary company supply chains.
+- **Daytona:** choosing sandbox execution sends validated price inputs to the protected Railway API. It uploads the same fixed JavaScript backtest engine, not user code, runs it in a network-blocked sandbox with bounded resources/time, and deletes the sandbox in `finally`, with automatic cleanup as a fallback. No financial API credentials are sent to it. The engine runs without installing dependencies. The earlier report extractor continues to use Python.
+- **Nosana:** optional evidence explanations through a Nosana-hosted vLLM/OpenAI-compatible deployment. Set backend-only `NOSANA_INFERENCE_URL` (base including `/v1`), `NOSANA_MODEL`, and optional `NOSANA_INFERENCE_KEY`. **Ask Nosana model** sends only eligible curated evidence and requests cited edge IDs plus counterarguments. Output is labelled model-generated and needs verification. The adapter does not provision GPUs, train models, validate generated citations, or prove that an arbitrarily configured endpoint is hosted by Nosana.
+
+Protected new routes:
+
+| Route                                             | Purpose                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------- |
+| `POST /api/shocks/seed`                           | Load the curated graph into configured Neo4j                     |
+| `GET /api/shocks/graph?root=MSFT&asOf=2024-03-19` | Retrieve dated exposure paths from Neo4j                         |
+| `POST /api/shocks/backtest`                       | Validate input and execute the fixed engine in Daytona           |
+| `POST /api/shocks/explain`                        | Explain date-eligible evidence using the configured Nosana model |
+
+Provider errors never silently fall back to demo results. Provider adapters are covered by mocked contract tests, but live GPU/sandbox/database execution still requires keys and has not been verified in this credential-free environment.
+
+### Research limits
+
+The graph is a small date-filtered reconstruction from current official webpages, **not a vintage archival dataset**. Even if edges pass the cutoff, retrospective selection of a shock or basket can still create hindsight bias. Graph reachability is not causation, revenue sensitivity, or a validated alpha signal. Backtesting one selected basket does not establish repeatable profitability. There are no buy/sell recommendations or guaranteed-return claims.
+
+Primary graph source: [NVIDIA's March 18, 2024 Blackwell announcement](https://nvidianews.nvidia.com/news/nvidia-blackwell-platform-arrives-to-power-a-new-era-of-computing/). A later [Microsoft FY24 Q4 earnings call](https://www.microsoft.com/en-us/investor/events/fy-2024/earnings-fy-2024-q4) appears as counterevidence to the hypothetical spending-cut scenario only after its publication date.
 
 ## Run the dashboard
 
@@ -17,7 +49,7 @@ Built with React 19, TypeScript, Vite, Tailwind 4, Lucide, and a shadcn-compatib
 
 The supplied Analytics Bento component lives in `src/components/ui/analytics-bento.tsx`, adapted for financial reporting periods and the research-led visual design. `src/research.css` defines the paper-and-ink theme: serif section headings, monospaced numbers, ruled sections, plain status labels, and an asymmetric reading layout. Decorative rings, gradients, tinted icon tiles, glass effects, and card shadows are removed. Its financial view uses actual quarterly observations rather than invented daily series. Original supplied component credit: vasnev.art.
 
-## What works without any keys
+## Company memory: what works without any keys
 
 - Historical NVIDIA FY25 Q1–Q3 financials, with linked investor-relations sources.
 - Q2 → Q3 curated changes and thesis assessments, clearly separated from source facts.
@@ -64,7 +96,7 @@ Routes (all require `Authorization: Bearer <API_TOKEN>`):
 | `POST /api/reports`                     | Accepts `companyId`, `companyName`, `title`, `period`, `url`; executes Daytona extraction and saves to Neo4j |
 | `GET /api/companies/:id/memory`         | Reads reports and associated evidence from Neo4j                                                             |
 
-Neo4j model: `(Company)-[:HAS_REPORT]->(Report)-[:CONTAINS]->(Evidence)-[:ABOUT]->(Topic)`. Evidence carries the exact extracted text and category, and each report retains its source URL and period. Parameterized queries prevent report content from becoming Cypher. The initial backend supports document/evidence/topic memory; automated customer/supplier entity resolution, hosted thesis synchronization, and an LLM reasoning service are future extensions. Nosana is optional and is not integrated in this version.
+Neo4j report-memory model: `(Company)-[:HAS_REPORT]->(Report)-[:CONTAINS]->(Evidence)-[:ABOUT]->(Topic)`. Evidence carries the exact extracted text and category, and each report retains its source URL and period. Parameterized queries prevent report content from becoming Cypher. Automated customer/supplier entity resolution and hosted thesis synchronization remain future extensions. The separate shock lab adds a curated company-exposure graph and an optional Nosana evidence-explanation adapter as described above.
 
 Live service integration needs working credentials and a separately deployed backend. It has not been exercised against live Daytona or Neo4j in the credential-free demo. API tests inject fake services to verify authentication, validation, and routing; they do not prove external service availability.
 

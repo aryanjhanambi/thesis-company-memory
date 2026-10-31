@@ -4,6 +4,12 @@ import { createApp } from './app.mjs';
 test('API authenticates, validates, and returns a persisted integration result', async (t) => {
   let received;
   const services = {
+    shock: {
+      seed: async () => ({ relationships: 5 }),
+      graph: async (root, asOf) => ({ root, asOf, paths: [] }),
+      backtest: async (input) => ({ executor: 'daytona', tickers: input.tickers }),
+      explain: async () => ({ text: 'Test explanation' }),
+    },
     discover: async (ticker) => ({
       ticker,
       reports: [{ title: 'Official report', url: 'https://www.sec.gov/report' }],
@@ -32,6 +38,34 @@ test('API authenticates, validates, and returns a persisted integration result',
     Origin: 'https://example.github.io',
   };
   const health = await fetch(base + '/api/health', { headers });
+  assert.equal(
+    (await fetch(base + '/api/shocks/seed', { method: 'POST', headers, body: '{}' })).status,
+    200,
+  );
+  assert.deepEqual(
+    await (await fetch(base + '/api/shocks/graph?root=MSFT&asOf=2024-03-19', { headers })).json(),
+    { root: 'MSFT', asOf: '2024-03-19', paths: [] },
+  );
+  assert.equal(
+    (
+      await (
+        await fetch(base + '/api/shocks/backtest', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ tickers: ['NVDA'] }),
+        })
+      ).json()
+    ).executor,
+    'daytona',
+  );
+  assert.equal(
+    (
+      await (
+        await fetch(base + '/api/shocks/explain', { method: 'POST', headers, body: '{}' })
+      ).json()
+    ).text,
+    'Test explanation',
+  );
   const discovery = await fetch(base + '/api/reports/discover?ticker=NVDA', { headers });
   assert.equal(discovery.status, 200);
   assert.equal((await discovery.json()).ticker, 'NVDA');
